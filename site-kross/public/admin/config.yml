@@ -1,0 +1,201 @@
+backend:
+  name: git-gateway
+  branch: main
+local_backend: true
+
+media_folder: "static/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "home"
+    label: "Home"
+    description: "Homepage hero, section titles, bio text, and contact CTA."
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        file: "content/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Subtitle", name: "tagline", widget: "string", required: false }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "CTA Label", name: "cta_label", widget: "string" }
+              - { label: "CTA Link", name: "cta_link", widget: "string" }
+          - { label: "Featured Poetry Title", name: "featured_poetry_title", widget: "string" }
+          - { label: "Books Title", name: "books_title", widget: "string" }
+          - { label: "Events Title", name: "events_title", widget: "string" }
+          - { label: "Bio Title", name: "bio_title", widget: "string", required: false }
+          - { label: "Bio Text", name: "bio_text", widget: "markdown" }
+          - { label: "Contact Title", name: "contact_title", widget: "string" }
+          - { label: "Contact CTA", name: "contact_cta", widget: "string" }
+          - { label: "Contact Link", name: "contact_link", widget: "string" }
+
+  - name: "poetry"
+    label: "Poetry"
+    description: "Portfolio items with thumbnails and links or PDFs."
+    folder: "content/poetry"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Sort Order (lower shows first)", name: "weight", widget: "number", required: false, value_type: "int", min: 0 }
+      - { label: "Work/Poem Title (Bibliography)", name: "work_title", widget: "string", required: false }
+      - { label: "Publisher", name: "publisher", widget: "string" }
+      - { label: "Publication Date", name: "pub_date", widget: "datetime", required: false }
+      - { label: "Link URL (external or /uploads/...)", name: "params.url", widget: "string", required: false }
+      - { label: "PDF File", name: "pdf", widget: "file", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - label: "Featured (Homepage/Featured Poetry)"
+        name: "featured"
+        widget: "boolean"
+        required: false
+        hint: "Shows this item in Featured Poetry sections."
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "featured_poetry"
+    label: "Featured Poetry"
+    description: "Quick list of items marked featured."
+    folder: "content/poetry"
+    create: false
+    filter: { field: "featured", value: true }
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Sort Order (lower shows first)", name: "weight", widget: "number", required: false, value_type: "int", min: 0 }
+      - { label: "Work/Poem Title (Bibliography)", name: "work_title", widget: "string", required: false }
+      - { label: "Publisher", name: "publisher", widget: "string" }
+      - { label: "Publication Date", name: "pub_date", widget: "datetime", required: false }
+      - { label: "Link URL (external or /uploads/...)", name: "params.url", widget: "string", required: false }
+      - { label: "PDF File", name: "pdf", widget: "file", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - label: "Featured (Homepage/Featured Poetry)"
+        name: "featured"
+        widget: "boolean"
+        required: false
+        hint: "Shows this item in Featured Poetry sections."
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "poetry_index"
+    label: "Poetry Landing"
+    description: "Intro text for the Poetry landing page."
+    files:
+      - label: "Poetry Landing"
+        name: "poetry_index"
+        file: "content/poetry/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "poetry_bibliography"
+    label: "Bibliography"
+    description: "Intro text for the bibliography list."
+    files:
+      - label: "Bibliography"
+        name: "poetry_bibliography"
+        file: "content/poetry/bibliography/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "books"
+    label: "Books"
+    description: "Book pages with cover images, blurbs, and buy links."
+    folder: "content/books"
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/_index"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Sort Order (lower shows first)", name: "weight", widget: "number", required: false, value_type: "int", min: 0 }
+      - { label: "Publication Date", name: "pub_date", widget: "datetime", required: false }
+      - { label: "Cover Image", name: "cover", widget: "image" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - label: "Buy Links"
+        name: "buy_links"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Label", name: "label", widget: "string" }
+          - { label: "URL", name: "url", widget: "string" }
+      - label: "Praise"
+        name: "praise"
+        widget: "list"
+        required: false
+        field: { label: "Quote", name: "quote", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "books_index"
+    label: "Books Landing"
+    description: "Intro text for the Books landing page."
+    files:
+      - label: "Books Landing"
+        name: "books_index"
+        file: "content/books/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "events"
+    label: "Events"
+    description: "Readings and events entries; future dates show as Upcoming."
+    folder: "content/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "URL", name: "params.url", widget: "string", required: false }
+      - { label: "Type", name: "type", widget: "select", options: ["reading", "talk", "workshop", "other"] }
+      - { label: "Featured", name: "featured", widget: "boolean", required: false }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "events_index"
+    label: "Events Landing"
+    description: "Intro text for the Events landing page."
+    files:
+      - label: "Events Landing"
+        name: "events_index"
+        file: "content/events/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "pages"
+    label: "Pages"
+    description: "About, Contact, and Teaching pages, including the CV download."
+    files:
+      - label: "About"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "CV File", name: "cv_file", widget: "file", required: false }
+          - { label: "CV Label", name: "cv_label", widget: "string", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }
+      - label: "Contact"
+        name: "contact"
+        file: "content/pages/contact.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Enable Form", name: "form", widget: "boolean", default: true }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+      - label: "Teaching"
+        name: "teaching"
+        file: "content/teaching/_index.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false }
+          - { label: "Body", name: "body", widget: "markdown", required: false }

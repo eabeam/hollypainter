@@ -1,0 +1,112 @@
+{{ define "main" }}
+{{ partial "components/page-title.html" . }}
+<section class="section">
+  <div class="container">
+    {{ with .Params.intro }}
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <p class="lead text-dark">{{ . }}</p>
+      </div>
+    </div>
+    {{ end }}
+    {{ with .Content }}
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <div class="content">{{ . }}</div>
+      </div>
+    </div>
+    {{ end }}
+    <div class="row mb-4">
+      <div class="col-12 text-lg-end">
+        <a class="btn btn-primary btn-sm" href="/poetry/bibliography/">Full Bibliography</a>
+      </div>
+    </div>
+    {{ $poetryPages := .RegularPages }}
+    {{ $weightedPoems := where $poetryPages "Params.weight" "ne" nil }}
+    {{ if gt (len $weightedPoems) 0 }}
+      {{ $weightedPoems = sort $weightedPoems "Params.weight" "asc" }}
+      {{ $unweightedPoems := where $poetryPages "Params.weight" "eq" nil }}
+      {{ $poetryPages = $weightedPoems | append $unweightedPoems }}
+    {{ end }}
+    {{ $featured := where $poetryPages "Params.featured" true }}
+    {{ if eq (len $featured) 0 }}
+      {{ $featured = first 6 $poetryPages }}
+    {{ end }}
+    {{ if gt (len $featured) 0 }}
+    <div class="row align-items-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">{{ with .Site.GetPage "/" }}{{ .Params.featured_poetry_title }}{{ else }}Featured Poetry{{ end }}</h2>
+      </div>
+    </div>
+    <div class="row poetry-featured mb-5">
+      {{ range first 6 $featured }}
+      {{ $poetryLink := .Params.pdf | default .Params.url }}
+      {{ $featuredImage := .Params.image | default "/uploads/poetry-card-placeholder.svg" }}
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow h-100">
+          {{ partial "image.html" (dict "Src" $featuredImage "Alt" .Title "Class" "card-img-top poetry-featured-image") }}
+          <div class="card-body">
+            <h3 class="h5">
+              {{ if $poetryLink }}
+              <a class="text-dark" href="{{ $poetryLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+              {{ else }}
+              {{ .Title }}
+              {{ end }}
+            </h3>
+            {{ with .Params.publisher }}
+            <p class="small text-muted mb-2">in {{ . }}</p>
+            {{ end }}
+            {{ with .Params.excerpt }}
+            <p class="small text-muted">{{ . }}</p>
+            {{ end }}
+          </div>
+          {{ if $poetryLink }}
+          <div class="card-footer bg-white border-0">
+            <a class="btn btn-sm btn-outline-primary" href="{{ $poetryLink }}" target="_blank" rel="noopener">Read</a>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="btn-group btn-group-toggle justify-content-center d-flex flex-wrap" data-bs-toggle="buttons">
+          <label class="btn btn-sm btn-primary active poetry-filter-all">
+            <input type="radio" name="shuffle-filter" class="d-none" value="all" checked="checked" />All
+          </label>
+          {{ $tags := slice }}
+          {{ range $poetryPages }}
+            {{ range .Params.tags }}
+              {{ $tags = $tags | append . }}
+            {{ end }}
+          {{ end }}
+          {{ range ($tags | uniq) }}
+          <label class="btn btn-sm btn-primary">
+            <input type="radio" name="shuffle-filter" class="d-none" value="{{ . | urlize }}" />{{ . | humanize }}
+          </label>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+    <div class="row shuffle-wrapper">
+      {{ range $poetryPages }}
+      {{ $poetryLink := .Params.pdf | default .Params.url }}
+      {{ $thumbImage := .Params.image | default "/uploads/poetry-card-placeholder.svg" }}
+      <div class="col-lg-3 col-md-4 col-6 mb-4 shuffle-item" data-groups='[{{ range $index, $element := .Params.tags }}{{ if ne $index 0 }},{{ end }}"{{ . | urlize }}"{{ end }}]'>
+        <div class="card shadow h-100 poetry-thumb-card">
+          {{ if $poetryLink }}
+          <a class="poetry-thumb-link" href="{{ $poetryLink }}" target="_blank" rel="noopener">
+            {{ partial "image.html" (dict "Src" $thumbImage "Alt" .Title "Class" "card-img-top poetry-thumb") }}
+          </a>
+          {{ else }}
+          {{ partial "image.html" (dict "Src" $thumbImage "Alt" .Title "Class" "card-img-top poetry-thumb") }}
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,50 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="content">{{ .Content }}</div>
+        {{ if eq .File.BaseFileName "about" }}
+        {{ with .Params.cv_file }}
+        <p class="mt-4">
+          <a href="{{ . | safeURL }}">{{ $.Params.cv_label | default "Download CV (PDF)" }}</a>
+        </p>
+        {{ end }}
+        {{ end }}
+        {{ if eq .File.BaseFileName "contact" }}
+        {{ with .Params.email }}
+        <div class="mt-4">
+          <h3>Email</h3>
+          <p><a href="mailto:{{ . }}">{{ . }}</a></p>
+        </div>
+        {{ end }}
+        {{ if .Params.form }}
+        <div class="mt-4">
+          <h3>Send a Note</h3>
+          <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact">
+            <p class="d-none">
+              <label>Don't fill this out if you're human: <input name="bot-field"></label>
+            </p>
+            <div class="form-group">
+              <label for="contact-name">Name</label>
+              <input class="form-control" id="contact-name" type="text" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-email">Email</label>
+              <input class="form-control" id="contact-email" type="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea class="form-control" id="contact-message" name="message" rows="5" required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Send message</button>
+          </form>
+        </div>
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

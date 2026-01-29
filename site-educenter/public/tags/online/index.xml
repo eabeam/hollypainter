@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Online on Holly Painter</title>
+    <link>//localhost:1313/tags/online/</link>
+    <description>Recent content in Online on Holly Painter</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="//localhost:1313/tags/online/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Neonatology Kindergarten</title>
+      <link>//localhost:1313/poetry/neonatology-kindergarten/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/poetry/neonatology-kindergarten/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Rain in Big River, Saskatchewan</title>
+      <link>//localhost:1313/poetry/rain-in-big-river/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/poetry/rain-in-big-river/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
