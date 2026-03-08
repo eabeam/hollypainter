@@ -1,10 +1,20 @@
 # Holly Painter - Hugo + Educenter
 
+This site is now self-contained. It does not need a separate local Educenter theme checkout to render correctly.
+
+See [MAINTENANCE.md](/Users/ebeam/Dropbox/GitHub/hollypainter/site-educenter/MAINTENANCE.md) for the current structure and the reasoning behind the vendored theme assets.
+
 ## Local development
 - Install Hugo Extended (0.147.2 or newer).
 - From the site root, run `hugo server -D`.
 - Visit `http://localhost:1313`.
 - Open the CMS at `http://localhost:1313/admin`.
+
+## Structure
+- Custom templates live in `layouts/`.
+- Active CSS/JS/assets live in `static/`.
+- `static/plugins/` and `static/images/` contain the vendored Educenter assets required for rendering.
+- `themes/educenter/` is a legacy leftover and should not be treated as the source of truth.
 
 ## Netlify deployment
 1. Push this folder to a Git repo.

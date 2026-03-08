@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>The pressure of all that light on Holly Painter</title>
-    <link>/books/the-pressure-of-all-that-light/</link>
+    <link>http://localhost:1315/books/the-pressure-of-all-that-light/</link>
     <description>Recent content in The pressure of all that light on Holly Painter</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="/books/the-pressure-of-all-that-light/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1315/books/the-pressure-of-all-that-light/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

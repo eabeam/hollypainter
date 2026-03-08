@@ -1,7 +1,8 @@
 ######################## default configuration ####################
 baseURL = "/"
 title = "Holly Painter"
-theme = ["kross"]
+# This site now renders from the checked-in layouts/static/assets files in this
+# directory. Do not rely on a separate `themes/kross` checkout.
 # Default time zone for time stamps; use any valid tz database name: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
 timeZone = "UTC"
 # post pagination

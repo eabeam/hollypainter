@@ -1,15 +1,1 @@
-{
-  "name": "Holly Painter",
-  "short_name": "Holly Painter",
-  "lang": "en-us",
-  "display": "fullscreen",
-  "orientation" : "portrait",
-  "start_url": "/?utm_source=web_app_manifest",
-  "background_color": "#F4F1EC",
-  "theme_color": "#0F5D5E",
-
-  
-  
-  
-  
-}
+{"name":"Holly Painter","short_name":"Holly Painter","lang":"en-us","display":"fullscreen","orientation":"portrait","start_url":"/?utm_source=web_app_manifest","background_color":"#F4F1EC","theme_color":"#0F5D5E"}

@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Obsolete Jobs Project on Holly Painter</title>
-    <link>/books/obsolete-jobs-project/</link>
+    <link>http://localhost:1315/books/obsolete-jobs-project/</link>
     <description>Recent content in Obsolete Jobs Project on Holly Painter</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="/books/obsolete-jobs-project/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1315/books/obsolete-jobs-project/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

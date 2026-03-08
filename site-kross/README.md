@@ -1,10 +1,20 @@
 # Holly Painter - Hugo + Kross
 
+This site is now self-contained. It does not need a separate local Kross theme checkout to render correctly.
+
+See [MAINTENANCE.md](/Users/ebeam/Dropbox/GitHub/hollypainter/site-kross/MAINTENANCE.md) for the current structure and the vendored theme scaffolding.
+
 ## Local development
 - Install Hugo Extended (0.147.2 or newer).
 - From the site root, run `hugo server -D`.
 - Visit `http://localhost:1313`.
 - Open the CMS at `http://localhost:1313/admin`.
+
+## Structure
+- Custom templates and vendored theme templates live in `layouts/`.
+- The Kross asset pipeline now lives in `assets/`.
+- Static files and illustrations live in `static/`.
+- `themes/kross/` is a legacy leftover and should not be treated as the source of truth.
 
 ## Netlify deployment
 1. Push this folder to a Git repo.
