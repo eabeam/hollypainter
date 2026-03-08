@@ -5,7 +5,9 @@ This site is now self-contained. It does not need a separate local Educenter the
 See [MAINTENANCE.md](/Users/ebeam/Dropbox/GitHub/hollypainter/site-educenter/MAINTENANCE.md) for the current structure and the reasoning behind the vendored theme assets.
 
 ## Local development
-- Install Hugo Extended (0.147.2 or newer).
+- Install Hugo Extended.
+- Current local version verified: `0.156.0`.
+- Netlify target version: `0.147.2` or newer.
 - From the site root, run `hugo server -D`.
 - Visit `http://localhost:1313`.
 - Open the CMS at `http://localhost:1313/admin`.

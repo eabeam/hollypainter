@@ -434,6 +434,12 @@ a h4:hover {
 .page-title-section {
   padding: 200px 0 80px; }
 
+.page-title-section--default {
+  background:
+    linear-gradient(135deg, rgba(15, 93, 94, 0.94), rgba(26, 166, 166, 0.84)),
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 38%);
+}
+
 .custom-breadcrumb li.nasted {
   position: relative;
   padding-left: 25px; }

@@ -9,7 +9,7 @@
         <p class="subtitle text-lighten mb-4">{{ $hero.tagline | default "Poet and educator" }}</p>
         <div class="cta-row">
           <a href="{{ $hero.cta_link }}" class="btn btn-primary">{{ $hero.cta_label }}</a>
-          <a href="/about/" class="cta-link text-lighten">Read Full Bio</a>
+          <a href="{{ "about/" | relLangURL }}" class="cta-link text-lighten">Read Full Bio</a>
         </div>
       </div>
       <div class="hero-media">
@@ -29,7 +29,7 @@
         <div class="lead text-dark bio-text">{{ .Params.bio_text | markdownify }}</div>
       </div>
       <div class="col-lg-4 text-lg-right">
-        <a href="/about/" class="btn btn-primary">Read Full Bio</a>
+        <a href="{{ "about/" | relLangURL }}" class="btn btn-primary">Read Full Bio</a>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@
         <h2 class="section-title">{{ .Params.featured_poetry_title }}</h2>
       </div>
       <div class="col-md-4 text-md-right">
-        <a href="/poetry/" class="btn btn-sm btn-outline-primary">View all poetry</a>
+        <a href="{{ "poetry/" | relLangURL }}" class="btn btn-sm btn-outline-primary">View all poetry</a>
       </div>
     </div>
     <div class="row">
@@ -110,7 +110,7 @@
         <h2 class="section-title">{{ .Params.books_title }}</h2>
       </div>
       <div class="col-md-4 text-md-right">
-        <a href="/books/" class="btn btn-sm btn-outline-primary">View all books</a>
+        <a href="{{ "books/" | relLangURL }}" class="btn btn-sm btn-outline-primary">View all books</a>
       </div>
     </div>
     <div class="row">

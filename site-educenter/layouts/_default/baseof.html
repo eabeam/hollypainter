@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ site.LanguageCode | default `en-us` }}">
 <head>
+  {{ $pageTitle := cond .IsHome site.Title .Title }}
+  {{ $summaryText := .Summary | plainify | htmlUnescape | strings.TrimSpace }}
+  {{ $pageDescription := .Params.description | default .Description | default $summaryText | default site.Params.description }}
+  {{ $canonical := .Permalink | default site.BaseURL }}
   <meta charset="utf-8">
-  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}</title>
+  <title>{{ $pageTitle }}</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="{{ site.Params.description }}">
+  <meta name="description" content="{{ $pageDescription }}">
   <meta name="author" content="{{ site.Params.author }}">
   <meta name="theme-name" content="educenter-hugo">
   <meta name="generator" content="Hugo {{ hugo.Version }}">
+  <link rel="canonical" href="{{ $canonical }}">
+  <meta property="og:title" content="{{ $pageTitle }}">
+  <meta property="og:description" content="{{ $pageDescription }}">
+  <meta property="og:url" content="{{ $canonical }}">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ $pageTitle }}">
+  <meta name="twitter:description" content="{{ $pageDescription }}">
 
   {{ range site.Params.plugins.css }}
   <link rel="stylesheet" href="{{ .link | absURL }}">

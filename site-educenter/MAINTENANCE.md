@@ -32,4 +32,5 @@ To reduce breakage, the required theme assets are now vendored directly into thi
 ## Hugo dependency
 
 - The site works with local Hugo `0.156.0` as of March 7, 2026.
+- The module configuration itself only requires Hugo `0.115.1`, but local testing and deployment should stay on a newer Extended release.
 - The only module import still in use is `github.com/gethugothemes/hugo-modules/images` via `config/_default/module.toml`.
