@@ -5,7 +5,8 @@
 Use **Netlify** to host the new `site-educenter` Hugo site, keep the **domain registration at GoDaddy**, and cancel only the **old GoDaddy hosting** after the new site is live and stable.
 
 Why this is the best fit:
-- The repo already contains a working Netlify build config in `site-educenter/netlify.toml`.
+- The repo now includes a root-level `netlify.toml` that points Netlify at `site-educenter`.
+- The site folder also keeps its own working Netlify build config in `site-educenter/netlify.toml`.
 - Netlify supports custom domains and SSL on its current Free plan.
 - This is the lowest-friction path from the current repo to a live site.
 
@@ -153,9 +154,11 @@ In Netlify:
 1. Create a new site from Git.
 2. Connect GitHub.
 3. Select `eabeam/hollypainter`.
-4. Set **Base directory** to `site-educenter`.
-5. Set **Build command** to `hugo --gc --minify`.
-6. Set **Publish directory** to `public`.
+4. If Netlify auto-detects the repo-level `netlify.toml`, keep the detected settings.
+5. If it does not, set:
+   - **Base directory** to `site-educenter`
+   - **Build command** to `hugo --gc --minify`
+   - **Publish directory** to `public`
 
 Environment variables:
 - `HUGO_VERSION=0.147.2`

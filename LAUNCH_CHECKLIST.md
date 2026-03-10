@@ -11,7 +11,8 @@ This version assumes:
 Use `site-educenter` + Netlify + Holly's existing domain.
 
 Why this is the best low-cost option for this repo:
-- `site-educenter` already has a working `netlify.toml`.
+- The repo root now has a `netlify.toml` that defaults Netlify to `site-educenter`.
+- `site-educenter` still has its own `netlify.toml`.
 - The CMS in `site-educenter/static/admin/config.yml` uses `git-gateway`, which is designed for Netlify Identity.
 - Netlify's current Free plan supports custom domains with SSL, so this is likely enough unless traffic or usage grows.
 
@@ -134,9 +135,10 @@ In Netlify:
 1. Click `Add new site` or `Import from Git`.
 2. Connect GitHub.
 3. Select the `eabeam/hollypainter` repo.
-4. Set the **Base directory** to `site-educenter`.
-5. Build command: `hugo --gc --minify`
-6. Publish directory: `public`
+4. If Netlify auto-detects the repo-level `netlify.toml`, keep the detected settings.
+5. If it does not, set the **Base directory** to `site-educenter`.
+6. Build command: `hugo --gc --minify`
+7. Publish directory: `public`
 
 Set these environment variables:
 - `HUGO_VERSION = 0.147.2`
