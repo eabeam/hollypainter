@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Teaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-top: 64px;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-breadcrumb {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .page-breadcrumb a {
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .page-breadcrumb a:hover { color: var(--white); }
+  .page-breadcrumb .sep { color: var(--vermillion); margin: 0 0.5rem; }
+  .page-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+  .page-intro {
+    font-size: 1.1rem;
+    color: rgba(248,248,246,0.85);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 700px;
+  }
+
+  /* ── AWARD BANNER ── */
+  .award-banner {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .award-banner-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .award-icon-area {
+    background: var(--vermillion);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+  .award-content {
+    padding: 2rem 2.5rem;
+  }
+  .award-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .award-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .award-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* ── COURSE CARDS ── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .course-card {
+    background: var(--black);
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .course-card:hover { background: var(--off-black); }
+  .course-card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s;
+  }
+  .course-card:hover .course-card-num { color: var(--vermillion); }
+  .course-card h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .course-card p {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .placeholder-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--teal);
+    background: rgba(26,138,125,0.08);
+    border: 1px solid rgba(26,138,125,0.2);
+    padding: 1rem 1.25rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+  }
+
+  /* ── BENTO GRID ── */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .bento-card {
+    background: var(--black);
+    padding: 2.5rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .bento-card:hover { background: var(--off-black); }
+  .bento-card.full-width { grid-column: span 2; }
+  .bento-card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .bento-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .bento-card p {
+    font-size: 0.9rem;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 500px;
+  }
+
+  /* ── PROGRAM TAGS ── */
+  .program-tags {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .program-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--light);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+  }
+  .program-tag:hover {
+    border-color: var(--vermillion);
+    color: var(--white);
+  }
+
+  /* ── WRITING CENTER HIGHLIGHT ── */
+  .wc-highlight {
+    background: rgba(26,138,125,0.06);
+    border-left: 3px solid var(--teal);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+  }
+  .wc-highlight p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--teal);
+    line-height: 1.6;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  /* ── PROMINENT LINK ── */
+  .prominent-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--off-black);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.3s;
+    margin-top: 2rem;
+  }
+  .prominent-link:hover {
+    background: var(--charcoal);
+    border-color: var(--vermillion);
+  }
+  .prominent-link .link-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .prominent-link .link-text {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .prominent-link .link-url {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    margin-top: 0.25rem;
+  }
+  .prominent-link .arrow {
+    margin-left: auto;
+    font-size: 1.4rem;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .prominent-link:hover .arrow {
+    color: var(--vermillion);
+    transform: translate(4px, -4px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card.full-width { grid-column: span 1; }
+    .page-title { font-size: 2.5rem; }
+    .award-banner-inner { grid-template-columns: 80px 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 3rem 1.25rem; }
+    .page-header { padding: 4rem 1.25rem 2rem; }
+    .page-title { font-size: 2rem; }
+    .section-title { font-size: 1.8rem; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .award-banner-inner { grid-template-columns: 1fr; }
+    .award-icon-area { padding: 1rem; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="option-b-crossword-grid.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-crossword-grid.html#roles" class="active">Academic</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#about">About</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb anim-up">
+      <a href="option-b-crossword-grid.html">Home</a>
+      <span class="sep">//</span>
+      <a href="option-b-crossword-grid.html#roles">Academic</a>
+      <span class="sep">//</span>
+      Teaching
+    </div>
+    <h1 class="page-title anim-up d1">Teaching</h1>
+    <p class="page-intro anim-up d2">Award-winning, student-centered courses blending creative practice, research, and public-facing work. Inviting students to write, question, and build new frameworks for understanding culture, labor, and climate.</p>
+  </div>
+</div>
+
+<!-- AWARD BANNER -->
+<div class="award-banner">
+  <div class="award-banner-inner anim-up d3">
+    <div class="award-icon-area">&#9733;</div>
+    <div class="award-content">
+      <div class="award-label">Teaching Excellence</div>
+      <div class="award-title">Kroepsch-Maurice Excellence in Teaching Award</div>
+      <div class="award-year">2020 &mdash; University of Vermont</div>
+    </div>
+  </div>
+</div>
+
+<!-- RECENT COURSES -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Recent Courses</h2>
+    </div>
+    <div class="courses-grid">
+
+      <div class="course-card">
+        <div class="course-card-num">COURSE 01</div>
+        <h3>Climate Change in Sci-Fi &amp; Fantasy</h3>
+        <div class="placeholder-note">[Brief description needed from Holly]</div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-num">COURSE 02</div>
+        <h3>Should We Settle Space?</h3>
+        <div class="placeholder-note">[Brief description needed from Holly]</div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-num">COURSE 03</div>
+        <h3>Harry Potter</h3>
+        <div class="placeholder-note">[Brief description needed from Holly]</div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-num">COURSE 04</div>
+        <h3>At Work in America: Oral &amp; Written Histories</h3>
+        <div class="placeholder-note">[Brief description needed from Holly]</div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-num">COURSE 05</div>
+        <h3>Creative Writing</h3>
+        <div class="placeholder-note">[Brief description needed from Holly]</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section style="background: var(--off-black); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Programs</h2>
+    </div>
+    <p style="font-size: 1rem; color: var(--mid); line-height: 1.7; max-width: 700px; margin-bottom: 2rem;">Since joining the UVM faculty in 2016, Holly has taught courses in writing, literature, and oral history across multiple programs.</p>
+    <div class="program-tags">
+      <span class="program-tag">Patrick Leahy Honors College (HCOL)</span>
+      <span class="program-tag">Liberal Arts in Prison Program (LAPP)</span>
+      <span class="program-tag">Liberal Arts Scholars Program (LASP)</span>
+      <span class="program-tag">Arts and Creativity Learning Community</span>
+    </div>
+  </div>
+</section>
+
+<!-- WRITING CENTERS -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Writing Centers</h2>
+    </div>
+    <div class="bento-grid">
+      <div class="bento-card">
+        <div class="bento-card-tag">Undergraduate</div>
+        <h3>Interim Director, Undergraduate Writing Center (UWC)</h3>
+        <p>Supporting undergraduate writers across disciplines at UVM.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-card-tag">Graduate</div>
+        <h3>Interim Coordinator, Graduate Writing Center (GWC)</h3>
+        <p>Coordinating writing support for graduate students at UVM.</p>
+      </div>
+      <div class="bento-card full-width">
+        <div class="bento-card-tag">Research Highlight</div>
+        <h3>AI and the Writing Center</h3>
+        <div class="wc-highlight">
+          <p>[UWC AI research description needed from Holly]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE -->
+<section style="border-top: 1px solid rgba(255,255,255,0.06);">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Service</h2>
+    </div>
+    <div class="bento-grid" style="grid-template-columns: 1fr;">
+      <div class="bento-card">
+        <div class="bento-card-tag">Community</div>
+        <h3>Board of Trustees, South Burlington Public Library</h3>
+        <p>Serving the community through public library governance and programming.</p>
+      </div>
+    </div>
+
+    <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank" class="prominent-link">
+      <div>
+        <div class="link-label">UVM Profile</div>
+        <div class="link-text">Holly Painter &mdash; Department of English</div>
+        <div class="link-url">uvm.edu/cas/english/profile/holly-painter</div>
+      </div>
+      <span class="arrow">&#8599;</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#about">About</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &#8599;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &#8599;</a>
+      <a href="option-b-teaching.html">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &#8599;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>

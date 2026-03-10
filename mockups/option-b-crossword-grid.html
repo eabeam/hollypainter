@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Option B: Crossword Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-top: 64px;
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+  }
+  .hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Crossword grid decoration */
+  .hero-grid-deco {
+    position: absolute;
+    top: 50%;
+    right: -5%;
+    transform: translateY(-50%);
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 3px;
+    opacity: 0.08;
+    z-index: 0;
+  }
+  .hero-grid-deco div {
+    background: var(--white);
+    border-radius: 1px;
+  }
+  .hero-grid-deco div:nth-child(3),
+  .hero-grid-deco div:nth-child(7),
+  .hero-grid-deco div:nth-child(12),
+  .hero-grid-deco div:nth-child(18),
+  .hero-grid-deco div:nth-child(25),
+  .hero-grid-deco div:nth-child(31),
+  .hero-grid-deco div:nth-child(38),
+  .hero-grid-deco div:nth-child(42),
+  .hero-grid-deco div:nth-child(50),
+  .hero-grid-deco div:nth-child(55),
+  .hero-grid-deco div:nth-child(60) { background: var(--black); }
+
+  .hero-name {
+    font-size: 5.5rem;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+  .hero-name .first { color: var(--white); display: block; }
+  .hero-name .last {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--vermillion);
+    display: block;
+  }
+  .hero-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    line-height: 2;
+    margin-bottom: 2rem;
+  }
+  .hero-subtitle strong { color: var(--white); font-weight: 700; }
+  .hero-subtitle .divider { color: var(--vermillion); margin: 0 0.5rem; }
+
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  .hero-photo {
+    position: relative;
+  }
+  .hero-photo-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-photo-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .hero-photo-label {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 6rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .section-desc {
+    font-size: 1rem;
+    color: var(--mid);
+    max-width: 500px;
+  }
+
+  /* ── POEM WIDGET ── */
+  .poem-section {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .poem-widget {
+    display: grid;
+    grid-template-columns: 80px 1fr 260px;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .poem-clue-num {
+    background: var(--vermillion);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--white);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.1em;
+  }
+  .poem-body {
+    padding: 3rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .poem-excerpt {
+    font-size: 1.15rem;
+    line-height: 2;
+    color: rgba(248,248,246,0.85);
+    font-weight: 300;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .poem-meta-line {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .poem-title-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--white);
+    font-weight: 700;
+  }
+  .poem-pub-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+  }
+  .poem-sidebar {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .poem-sidebar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .poem-sidebar-stat {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .poem-sidebar-desc {
+    font-size: 0.8rem;
+    color: var(--mid);
+    margin-bottom: 1.5rem;
+  }
+  .poem-refresh-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    background: none;
+    border: 1px solid var(--vermillion);
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+  .poem-refresh-btn:hover {
+    background: var(--vermillion);
+    color: var(--white);
+  }
+
+  /* ── BOOKS ── */
+  .books-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .book-cell {
+    border-right: 1px solid rgba(255,255,255,0.08);
+    padding: 0;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-cell:last-child { border-right: none; }
+  .book-cell:hover { background: rgba(255,255,255,0.03); }
+  .book-cell:hover .book-cell-num { color: var(--vermillion); }
+  .book-cover-area {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    position: relative;
+  }
+  .book-cover-area .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+  }
+  .book-cover-area .placeholder img {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .book-cover-area .placeholder span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .book-cell-info {
+    padding: 1.5rem;
+  }
+  .book-cell-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+  .book-cell-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+    color: var(--white);
+  }
+  .book-cell-press {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+  }
+
+  /* ── ROLES ── */
+  .roles-section { border-top: 1px solid rgba(255,255,255,0.06); }
+  .roles-bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .role-cell {
+    background: var(--black);
+    padding: 2.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .role-cell:hover { background: var(--off-black); }
+  .role-cell.wide { grid-column: span 2; }
+  .role-cell-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .role-cell h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .role-cell p {
+    font-size: 0.9rem;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 440px;
+  }
+  .role-cell .arrow {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 1.2rem;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .role-cell:hover .arrow { color: var(--vermillion); transform: translate(4px, -4px); }
+
+  /* ── COURSES ── */
+  .courses-strip {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .course-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--light);
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── EVENTS ── */
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .events-table thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .events-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .events-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .events-table td {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .events-table .date-col {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--vermillion);
+    white-space: nowrap;
+    width: 140px;
+  }
+  .events-table .type-col {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    width: 120px;
+  }
+  .events-table .location-col {
+    color: var(--mid);
+    font-size: 0.85rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-name { font-size: 4rem; }
+    .hero-photo { max-width: 360px; }
+    .books-row { grid-template-columns: repeat(2, 1fr); }
+    .book-cell:nth-child(2) { border-right: none; }
+    .roles-bento { grid-template-columns: 1fr; }
+    .role-cell.wide { grid-column: span 1; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .poem-widget { grid-template-columns: 60px 1fr; }
+    .poem-sidebar { display: none; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 4rem 1.25rem; }
+    .hero-name { font-size: 3rem; }
+    .section-title { font-size: 2rem; }
+    .books-row { grid-template-columns: 1fr; }
+    .book-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .events-table .location-col { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="#roles">Academic</a>
+      <a href="#events">Events</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="active">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Crossword deco -->
+  <div class="hero-grid-deco">
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+  </div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-name anim-up">
+        <span class="first">Holly</span>
+        <span class="last">Painter</span>
+      </div>
+      <div class="hero-subtitle anim-up d1">
+        <strong>Poet</strong> <span class="divider">//</span>
+        <strong>Senior Lecturer</strong>, UVM English <span class="divider">//</span>
+        <strong>Director</strong>, Center for Research on Vermont
+      </div>
+      <div class="hero-ctas anim-up d2">
+        <a href="#books" class="btn-fill">Browse Books</a>
+        <a href="#poetry" class="btn-ghost">Featured Poetry</a>
+        <a href="https://www.uvm.edu/cas/english/profile/holly-painter" class="btn-ghost" target="_blank">UVM Profile ↗</a>
+      </div>
+    </div>
+    <div class="hero-photo anim-up d3">
+      <div class="hero-photo-frame">
+        <img src="../site-educenter/static/uploads/wp/cropped-Holly-Painter-photo.jpg" alt="Holly Painter" style="width:100%;height:100%;object-fit:cover;object-position:65% 25%;">
+      </div>
+      <div class="hero-photo-label">Burlington, Vermont</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED POEM -->
+<section class="poem-section" id="poetry">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Featured Poetry</h2>
+    </div>
+    <div class="poem-widget" id="poemWidget">
+      <div class="poem-clue-num"></div>
+      <div class="poem-body">
+        <div class="poem-excerpt" id="poemExcerpt">
+          We drove the back roads, windows down,<br>
+          past the orchard where the last pears<br>
+          hung low and heavy as secrets.<br>
+          You said something about the light—<br>
+          how it pressed against the hills<br>
+          like a hand on a door about to open.
+        </div>
+        <div class="poem-meta-line">
+          <span class="poem-title-text" id="poemTitle">"The pressure of all that light"</span>
+          <span class="poem-pub-text" id="poemPub">— Hawai'i Review</span>
+        </div>
+      </div>
+      <div class="poem-sidebar">
+        <div></div>
+        <button class="poem-refresh-btn" onclick="showRandomPoem()">↻ Another poem</button>
+      </div>
+    </div>
+    <div style="margin-top:2rem; display:flex; gap:1rem;">
+      <a href="option-b-poetry.html" class="btn-ghost">All Featured Poetry →</a>
+      <a href="option-b-poetry-all.html" class="btn-ghost">Full Catalog →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section id="books">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Books</h2>
+      <p class="section-desc">Full-length collections. Click to explore.</p>
+    </div>
+    <div class="books-row">
+
+      <a href="option-b-books-detail.html#book-01" class="book-cell">
+        <div class="book-cover-area">
+          <div class="placeholder" style="background:linear-gradient(135deg,#1a1035,#3d1f6d);">
+            <img src="../site-educenter/static/uploads/wp/painter_listen_1200x-683x1024.webp" alt="At last, we listen closely" style="">
+          </div>
+        </div>
+        <div class="book-cell-info">
+          <div class="book-cell-num">01 — 2025</div>
+          <div class="book-cell-title">At last, we listen closely: cryptic crossword poems</div>
+          <div class="book-cell-press">Black Spring Press</div>
+        </div>
+      </a>
+
+      <a href="option-b-books-detail.html#book-02" class="book-cell">
+        <div class="book-cover-area">
+          <div class="placeholder" style="background:linear-gradient(135deg,#8a6a1a,#d4a843);">
+            <img src="../site-educenter/static/uploads/wp/The-pressure-of-all-that-light-cover-662x1024.jpeg" alt="The pressure of all that light" style="">
+          </div>
+        </div>
+        <div class="book-cell-info">
+          <div class="book-cell-num">02 — 2022</div>
+          <div class="book-cell-title">The pressure of all that light</div>
+          <div class="book-cell-press">Rebel Satori Press</div>
+        </div>
+      </a>
+
+      <a href="option-b-books-detail.html#book-03" class="book-cell">
+        <div class="book-cover-area">
+          <div class="placeholder" style="background:linear-gradient(135deg,#1a5a6a,#3a9ab5);">
+            <img src="../site-educenter/static/uploads/wp/My-Pet-Sounds-Off-over.jpg" alt="My Pet Sounds Off" style="">
+          </div>
+        </div>
+        <div class="book-cell-info">
+          <div class="book-cell-num">03 — 2020</div>
+          <div class="book-cell-title">My Pet Sounds Off: Translating the Beach Boys</div>
+          <div class="book-cell-press">Finishing Line Press</div>
+        </div>
+      </a>
+
+      <a href="option-b-books-detail.html#book-04" class="book-cell">
+        <div class="book-cover-area">
+          <div class="placeholder" style="background:linear-gradient(135deg,#2a4a2a,#4a7a4a);">
+            <img src="../site-educenter/static/uploads/wp/front-cover.png" alt="Excerpts from a Natural History" style="">
+          </div>
+        </div>
+        <div class="book-cell-info">
+          <div class="book-cell-num">04 — 2015</div>
+          <div class="book-cell-title">Excerpts from a Natural History</div>
+          <div class="book-cell-press">Titus Books, NZ</div>
+        </div>
+      </a>
+
+    </div>
+    <div style="margin-top:2rem">
+      <a href="option-b-books-detail.html" class="btn-ghost">Book details, reviews &amp; sample poems →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles-section" id="roles">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Academic Life</h2>
+    </div>
+    <div class="roles-bento">
+
+      <a href="option-b-crvt.html" class="role-cell wide">
+        <div class="role-cell-tag">Director</div>
+        <h3>Center for Research on Vermont</h3>
+        <p>UVM's hub for Vermont-focused scholarship, connecting faculty, students, and communities across the state.</p>
+        <span class="arrow">↗</span>
+      </a>
+
+      <a href="option-b-obsolete-jobs.html" class="role-cell">
+        <div class="role-cell-tag">Research</div>
+        <h3>Obsolete Jobs Project</h3>
+        <p>Oral histories with Americans whose jobs are disappearing. With economist EeCheng Ong.</p>
+        <span class="arrow">↗</span>
+      </a>
+
+      <a href="option-b-teaching.html" class="role-cell">
+        <div class="role-cell-tag">Teaching</div>
+        <h3>Senior Lecturer, UVM English</h3>
+        <p>Award-winning, student-centered courses. 2020 Kroepsch-Maurice Excellence in Teaching Award.</p>
+        <div class="courses-strip">
+          <span class="course-tag">Climate Change in Sci-Fi</span>
+          <span class="course-tag">Harry Potter</span>
+          <span class="course-tag">Oral History</span>
+          <span class="course-tag">Creative Writing</span>
+        </div>
+        <span class="arrow">↗</span>
+      </a>
+
+      <a href="#" class="role-cell wide">
+        <div class="role-cell-tag">Service</div>
+        <h3>Writing Centers &amp; Community</h3>
+        <p>Former Interim Coordinator of the Graduate Writing Center and Interim Director of the Undergraduate Writing Center. Board of Trustees, South Burlington Public Library. Teaching across UVM programs including Honors College, Arts &amp; Creativity LC, Liberal Arts Scholars, and Liberal Arts in Prison.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Events</h2>
+    </div>
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Location</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="date-col">Apr 26, 2025</td>
+          <td>Illuminate Vermont Poetry Reading</td>
+          <td class="location-col">Burlington, VT</td>
+          <td class="type-col">Reading</td>
+        </tr>
+        <tr>
+          <td class="date-col">Mar 30, 2025</td>
+          <td>Public Philosophy Week Pub Quiz</td>
+          <td class="location-col">University of Vermont</td>
+          <td class="type-col">Talk</td>
+        </tr>
+        <tr>
+          <td class="date-col">Sep 2024</td>
+          <td>Green Mountain Book Festival</td>
+          <td class="location-col">Burlington, VT</td>
+          <td class="type-col">Reading</td>
+        </tr>
+        <tr>
+          <td class="date-col">May 4, 2024</td>
+          <td>Waking Windows Poetry Reading</td>
+          <td class="location-col">Winooski, VT</td>
+          <td class="type-col">Reading</td>
+        </tr>
+        <tr>
+          <td class="date-col">Apr 29, 2024</td>
+          <td>National Poetry Month with Dan Close</td>
+          <td class="location-col">South Burlington Public Library</td>
+          <td class="type-col">Reading</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:2rem">
+      <a href="#" class="btn-ghost">All events →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="#">Books</a>
+      <a href="#">Poetry</a>
+      <a href="#">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept ↗</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont ↗</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs ↗</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+<script>
+const poems = [
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Swimming with Elephants</em>",
+    title: '"Afternoon"',
+    pub: "— Swimming with Elephants"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Apeiron</em>",
+    title: '"January, Lake Champlain"',
+    pub: "— Apeiron"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Bombay Gin</em>",
+    title: '"Cryptic Crossword XXXIII"',
+    pub: "— Bombay Gin"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Borderlands</em>",
+    title: '"Field Trip"',
+    pub: "— Borderlands"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Hawai\'i Review</em>",
+    title: '"Boys on the Beach"',
+    pub: "— Hawai'i Review"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in NZ Listener</em>",
+    title: '"Shipwrecked I Arrived"',
+    pub: "— NZ Listener"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in NZ Poetry Shelf</em>",
+    title: '"Mount Ebenezer Roadhouse"',
+    pub: "— NZ Poetry Shelf"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Cream City Review</em>",
+    title: '"Sonoran Song"',
+    pub: "— Cream City Review"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Storm Cellar</em>",
+    title: '"Tell Me a Story"',
+    pub: "— Storm Cellar"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Hue and Cry</em>",
+    title: '"In Which We Depart"',
+    pub: "— Hue and Cry"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in 4th River</em>",
+    title: '"The Tragedy of Space Opera"',
+    pub: "— 4th River"
+  },
+  {
+    excerpt: "[Excerpt needed from Holly]<br><br><em style='font-size:0.8rem;color:var(--mid);font-style:normal'>This poem appears in Landfall 223</em>",
+    title: '"Picton\'s Morning Crust"',
+    pub: "— Landfall 223"
+  }
+];
+
+function showRandomPoem() {
+  const body = document.querySelector('.poem-body');
+  body.style.opacity = '0';
+  body.style.transition = 'opacity 0.25s';
+  setTimeout(() => {
+    const poem = poems[Math.floor(Math.random() * poems.length)];
+    document.getElementById('poemExcerpt').innerHTML = poem.excerpt;
+    document.getElementById('poemTitle').textContent = poem.title;
+    document.getElementById('poemPub').textContent = poem.pub;
+    body.style.opacity = '1';
+  }, 250);
+}
+</script>
+
+</body>
+</html>

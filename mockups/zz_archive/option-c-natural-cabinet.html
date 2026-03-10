@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Option C: Natural Cabinet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --linen: #f5f0e8;
+    --parchment: #ece5d8;
+    --warm-white: #faf8f4;
+    --cream: #f8f4ec;
+    --amber: #b87a2b;
+    --amber-light: #d4993e;
+    --amber-dark: #8a5a1a;
+    --botanical: #3a6b4a;
+    --botanical-light: #5a8f6a;
+    --deep-brown: #2c1e12;
+    --ink: #1e1a14;
+    --text: #3d3428;
+    --text-mid: #6b5e4d;
+    --text-light: #9a8d7c;
+    --border: #d8cdb8;
+    --border-light: #e8dfd0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Karla', sans-serif;
+    background: var(--linen);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--deep-brown);
+    text-decoration: none;
+    font-style: italic;
+  }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--amber); }
+  .nav-links a.active { color: var(--amber-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-content { max-width: 720px; }
+
+  /* Botanical corner decorations */
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    opacity: 0.06;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .hero::before {
+    top: 100px;
+    left: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M20 180 Q40 100 100 60 Q80 120 90 180' fill='none' stroke='%233a6b4a' stroke-width='1.5'/%3E%3Cpath d='M100 60 Q120 40 160 30' fill='none' stroke='%233a6b4a' stroke-width='1'/%3E%3Cpath d='M100 60 Q130 80 140 120' fill='none' stroke='%233a6b4a' stroke-width='1'/%3E%3Cellipse cx='160' cy='30' rx='15' ry='8' fill='none' stroke='%233a6b4a' stroke-width='0.8' transform='rotate(-30 160 30)'/%3E%3Cellipse cx='140' cy='120' rx='12' ry='7' fill='none' stroke='%233a6b4a' stroke-width='0.8' transform='rotate(20 140 120)'/%3E%3C/svg%3E");
+  }
+  .hero::after {
+    bottom: 40px;
+    right: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M180 20 Q160 100 100 140 Q120 80 110 20' fill='none' stroke='%233a6b4a' stroke-width='1.5'/%3E%3Cpath d='M100 140 Q80 160 40 170' fill='none' stroke='%233a6b4a' stroke-width='1'/%3E%3Cpath d='M100 140 Q70 120 60 80' fill='none' stroke='%233a6b4a' stroke-width='1'/%3E%3C/svg%3E");
+  }
+
+  .hero-overline {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4.5rem;
+    font-weight: 300;
+    color: var(--deep-brown);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-roles-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .hero-roles-line span {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    font-weight: 400;
+  }
+  .hero-roles-line .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+  }
+  .hero-bio {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.75;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+  }
+  .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-warm {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    background: var(--amber);
+    color: var(--warm-white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .btn-warm:hover { background: var(--amber-dark); }
+  .btn-lined {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .btn-lined:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--deep-brown);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    max-width: 480px;
+    margin-bottom: 3rem;
+  }
+  .section-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--amber);
+    margin-bottom: 3rem;
+  }
+
+  /* ── FEATURED POEM WIDGET ── */
+  .poem-section {
+    background: var(--deep-brown);
+    color: var(--linen);
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .poem-section .section-label { color: var(--amber-light); }
+  .poem-section .section-title { color: var(--linen); }
+
+  .poem-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .poem-specimen {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    padding: 3rem;
+    position: relative;
+  }
+  .poem-specimen::before {
+    content: 'SPECIMEN';
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.2);
+    text-transform: uppercase;
+  }
+  .poem-specimen-number {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: var(--amber-light);
+    margin-bottom: 1.5rem;
+  }
+  .poem-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    line-height: 2;
+    color: rgba(245,240,232,0.85);
+    margin-bottom: 2.5rem;
+  }
+  .poem-attribution {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(245,240,232,0.1);
+  }
+  .poem-attr-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--linen);
+  }
+  .poem-attr-pub {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.4);
+    margin-top: 0.2rem;
+  }
+  .poem-new-btn {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--amber-light);
+    background: none;
+    border: 1px solid rgba(184,122,43,0.3);
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .poem-new-btn:hover {
+    background: rgba(184,122,43,0.15);
+    border-color: var(--amber-light);
+  }
+
+  .poem-sidebar-notes {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.6);
+  }
+  .poem-sidebar-notes strong { color: rgba(245,240,232,0.9); font-weight: 600; }
+  .poem-sidebar-notes a { color: var(--amber-light); text-decoration: underline; }
+  .poem-stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(245,240,232,0.08);
+    margin-top: 2rem;
+    border: 1px solid rgba(245,240,232,0.08);
+  }
+  .poem-stat {
+    background: var(--deep-brown);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .poem-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--amber-light);
+  }
+  .poem-stat-label {
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  /* ── BOOKS ── */
+  .books-section { background: var(--cream); }
+  .books-shelf {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+  }
+  .book-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .book-card:hover { transform: translateY(-8px); }
+  .book-cover {
+    width: 100%;
+    aspect-ratio: 2/3;
+    position: relative;
+    margin-bottom: 1.5rem;
+    box-shadow: 4px 6px 20px rgba(0,0,0,0.12), 1px 1px 4px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .book-cover .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .book-cover .placeholder span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+  }
+  /* Spine effect */
+  .book-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.2), transparent);
+    z-index: 1;
+  }
+  .book-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--deep-brown);
+    line-height: 1.35;
+    margin-bottom: 0.3rem;
+  }
+  .book-card .book-press {
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+  .book-card .book-year {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--amber);
+  }
+
+  /* ── ROLES ── */
+  .roles-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .role-specimen {
+    background: var(--warm-white);
+    border: 1px solid var(--border-light);
+    padding: 2.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    position: relative;
+    border-radius: 2px;
+  }
+  .role-specimen:hover {
+    border-color: var(--amber);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .role-specimen.full-width { grid-column: span 2; }
+  .role-tag {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .role-specimen h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--deep-brown);
+    margin-bottom: 0.75rem;
+  }
+  .role-specimen p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+  .role-link-text {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--amber);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ── COURSES ── */
+  .courses-wrap {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .course-pill {
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    padding: 0.35rem 0.9rem;
+    background: var(--cream);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+  }
+
+  /* ── EVENTS ── */
+  .events-section { background: var(--cream); }
+  .events-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .event-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border-light);
+    padding: 2rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .event-card:hover {
+    border-color: var(--amber);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .event-date {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .event-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--deep-brown);
+    margin-bottom: 0.4rem;
+    line-height: 1.35;
+  }
+  .event-location {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+  }
+  .event-type-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--botanical);
+    background: rgba(58,107,74,0.08);
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep-brown);
+    color: var(--linen);
+    padding: 4rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    position: relative;
+  }
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+  .footer-desc {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.7;
+    max-width: 300px;
+  }
+  .footer-col h4 {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: var(--amber-light);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--linen); }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,240,232,0.08);
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.3);
+    text-align: center;
+    position: relative;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes gentleFade {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .gfade {
+    animation: gentleFade 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  .gd1 { animation-delay: 0.15s; }
+  .gd2 { animation-delay: 0.3s; }
+  .gd3 { animation-delay: 0.45s; }
+  .gd4 { animation-delay: 0.6s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .hero-name { font-size: 3.5rem; }
+    .books-shelf { grid-template-columns: repeat(2, 1fr); }
+    .roles-layout { grid-template-columns: 1fr; }
+    .role-specimen.full-width { grid-column: span 1; }
+    .events-cards { grid-template-columns: 1fr; }
+    .poem-layout { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 3.5rem 1.5rem; }
+    .nav-inner { padding: 0 1.5rem; }
+    .hero { padding: 4rem 1.5rem; }
+    .hero-name { font-size: 2.8rem; }
+    .section-title { font-size: 2rem; }
+    .books-shelf { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Holly Painter</a>
+    <div class="nav-links">
+      <a href="#books">Books</a>
+      <a href="#poetry" class="active">Poetry</a>
+      <a href="#roles">Research &amp; Teaching</a>
+      <a href="#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-overline gfade">poet · scholar · teacher</div>
+    <h1 class="hero-name gfade gd1">Holly Painter</h1>
+    <div class="hero-roles-line gfade gd2">
+      <span>Senior Lecturer, <a href="https://www.uvm.edu/cas/english/profile/holly-painter" style="color:var(--amber);text-decoration:underline" target="_blank">UVM English</a></span>
+      <span class="dot"></span>
+      <span>Director, <a href="https://www.uvm.edu/cas/vermontresearch" style="color:var(--amber);text-decoration:underline" target="_blank">Center for Research on Vermont</a></span>
+    </div>
+    <p class="hero-bio gfade gd2">
+      Author of four books of poetry exploring language, identity, and place—from
+      cryptic crossword puzzles to queer coming-of-age in the American Midwest.
+    </p>
+    <div class="hero-ctas gfade gd3">
+      <a href="#books" class="btn-warm">Browse Books</a>
+      <a href="#poetry" class="btn-lined">Featured Poetry</a>
+      <a href="#" class="btn-lined">About Holly</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED POEM -->
+<section class="poem-section" id="poetry">
+  <div class="section-inner">
+    <div class="section-label">Featured Poetry</div>
+    <h2 class="section-title" style="color:var(--linen);">From the Collection</h2>
+    <div class="section-divider" style="margin-bottom:3rem;"></div>
+
+    <div class="poem-layout">
+      <div class="poem-specimen" id="poemSpecimen">
+        <div class="poem-specimen-number" id="poemNumber">No. 47</div>
+        <div class="poem-text" id="poemExcerpt">
+          We drove the back roads, windows down,<br>
+          past the orchard where the last pears<br>
+          hung low and heavy as secrets.<br>
+          You said something about the light—<br>
+          how it pressed against the hills<br>
+          like a hand on a door about to open.
+        </div>
+        <div class="poem-attribution">
+          <div>
+            <div class="poem-attr-title" id="poemTitle">"The pressure of all that light"</div>
+            <div class="poem-attr-pub" id="poemPub">Published in Hawai'i Review</div>
+          </div>
+          <button class="poem-new-btn" onclick="showRandomPoem()">↻ Next specimen</button>
+        </div>
+      </div>
+
+      <div class="poem-sidebar-notes">
+        <p>Holly's poetry has appeared in over <strong>90 journals</strong> worldwide, including
+          <em>Nimrod</em>, <em>Barrelhouse</em>, the <em>New Zealand Listener</em>,
+          and <em>Landfall</em>.</p>
+        <br>
+        <p>Her work explores queer identity, language as puzzle, the natural world,
+          and the tender archaeology of memory.</p>
+        <br>
+        <p><a href="#">Browse all publications →</a></p>
+
+        <div class="poem-stat-row">
+          <div class="poem-stat">
+            <div class="poem-stat-num">93+</div>
+            <div class="poem-stat-label">Publications</div>
+          </div>
+          <div class="poem-stat">
+            <div class="poem-stat-num">2×</div>
+            <div class="poem-stat-label">Pushcart Nom.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section class="books-section" id="books">
+  <div class="section-inner">
+    <div class="section-label">The Library</div>
+    <h2 class="section-title">Books</h2>
+    <p class="section-subtitle">Full-length collections. Click any book to explore.</p>
+    <div class="section-divider"></div>
+
+    <div class="books-shelf">
+
+      <a href="#" class="book-card">
+        <div class="book-cover">
+          <div class="placeholder" style="background:linear-gradient(145deg,#2a1f3d,#5a3d8d);">
+            <span>At last, we<br>listen closely</span>
+          </div>
+        </div>
+        <div class="book-year">2025</div>
+        <h3>At last, we listen closely</h3>
+        <div class="book-press">Black Spring Press</div>
+      </a>
+
+      <a href="#" class="book-card">
+        <div class="book-cover">
+          <div class="placeholder" style="background:linear-gradient(145deg,#b87a2b,#daa84e);">
+            <span>The pressure of<br>all that light</span>
+          </div>
+        </div>
+        <div class="book-year">2022</div>
+        <h3>The pressure of all that light</h3>
+        <div class="book-press">Rebel Satori Press</div>
+      </a>
+
+      <a href="#" class="book-card">
+        <div class="book-cover">
+          <div class="placeholder" style="background:linear-gradient(145deg,#2a6a8a,#4a9aba);">
+            <span>My Pet<br>Sounds Off</span>
+          </div>
+        </div>
+        <div class="book-year">2020</div>
+        <h3>My Pet Sounds Off</h3>
+        <div class="book-press">Finishing Line Press</div>
+      </a>
+
+      <a href="#" class="book-card">
+        <div class="book-cover">
+          <div class="placeholder" style="background:linear-gradient(145deg,#3a6b4a,#5a9a6a);">
+            <span>Excerpts from a<br>Natural History</span>
+          </div>
+        </div>
+        <div class="book-year">2015</div>
+        <h3>Excerpts from a Natural History</h3>
+        <div class="book-press">Titus Books, NZ</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section id="roles">
+  <div class="section-inner">
+    <div class="section-label">Academic Life</div>
+    <h2 class="section-title">Research, Teaching &amp; Service</h2>
+    <p class="section-subtitle">At the intersection of creative writing, public scholarship, and the study of Vermont.</p>
+    <div class="section-divider"></div>
+
+    <div class="roles-layout">
+
+      <a href="https://www.uvm.edu/cas/vermontresearch" class="role-specimen" target="_blank">
+        <div class="role-tag">Director</div>
+        <h3>Center for Research on Vermont</h3>
+        <p>UVM's hub for Vermont-focused scholarship, connecting faculty, students, and communities across the state.</p>
+        <span class="role-link-text">Visit CRVT →</span>
+      </a>
+
+      <a href="https://obsoleteontheroad.wordpress.com/" class="role-specimen" target="_blank">
+        <div class="role-tag">Research</div>
+        <h3>The Obsolete Jobs Project</h3>
+        <p>Ongoing oral history project (with economist EeCheng Ong) interviewing and photographing Americans whose jobs are becoming obsolete.</p>
+        <span class="role-link-text">Learn more →</span>
+      </a>
+
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" class="role-specimen full-width" target="_blank">
+        <div class="role-tag">Teaching</div>
+        <h3>Senior Lecturer, Department of English</h3>
+        <p>Award-winning, student-centered courses blending creative practice, research, and public-facing work. Winner of the 2020 Kroepsch-Maurice Excellence in Teaching Award. Teaching across UVM programs including the Honors College, Arts & Creativity LC, Liberal Arts Scholars, and Liberal Arts in Prison.</p>
+        <div class="courses-wrap">
+          <span class="course-pill">Climate Change in Sci-Fi & Fantasy</span>
+          <span class="course-pill">Should We Settle Space?</span>
+          <span class="course-pill">Harry Potter</span>
+          <span class="course-pill">At Work in America: Oral Histories</span>
+          <span class="course-pill">Creative Writing</span>
+        </div>
+        <span class="role-link-text">UVM Profile →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="events-section" id="events">
+  <div class="section-inner">
+    <div class="section-label">Readings & Appearances</div>
+    <h2 class="section-title">Events</h2>
+    <div class="section-divider"></div>
+
+    <div class="events-cards">
+
+      <a href="#" class="event-card">
+        <div class="event-date">April 12, 2026</div>
+        <h3>At last, we listen closely — Book Launch</h3>
+        <div class="event-location">Phoenix Books, Burlington VT</div>
+        <span class="event-type-badge">Reading</span>
+      </a>
+
+      <a href="#" class="event-card">
+        <div class="event-date">March 28, 2026</div>
+        <h3>Public Philosophy Week: Poetry & Labor</h3>
+        <div class="event-location">University of Vermont</div>
+        <span class="event-type-badge">Talk</span>
+      </a>
+
+      <a href="#" class="event-card">
+        <div class="event-date">February 15, 2026</div>
+        <h3>Creative Writing Workshop: Constraint-Based Forms</h3>
+        <div class="event-location">South Burlington Public Library</div>
+        <span class="event-type-badge">Workshop</span>
+      </a>
+
+    </div>
+
+    <div style="margin-top:2rem;text-align:center;">
+      <a href="#" class="btn-lined">View all events →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Holly Painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher based in Vermont. Author of four books of poetry. Director of the Center for Research on Vermont at the University of Vermont.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Site</h4>
+      <a href="#">Books</a>
+      <a href="#">Poetry</a>
+      <a href="#">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept.</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Center for Research on Vermont</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs Project</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Holly Painter. All rights reserved.
+  </div>
+</footer>
+
+<script>
+const poems = [
+  {
+    num: "No. 47",
+    excerpt: "We drove the back roads, windows down,<br>past the orchard where the last pears<br>hung low and heavy as secrets.<br>You said something about the light—<br>how it pressed against the hills<br>like a hand on a door about to open.",
+    title: '"The pressure of all that light"',
+    pub: "Published in Hawai'i Review"
+  },
+  {
+    num: "No. 12",
+    excerpt: "The crossword setter hides a deer<br>inside the thicket of the clue—<br>a zigzag thing that won't appear<br>until you've read the whole thing through.",
+    title: '"Cryptic Crossword XXXXI"',
+    pub: "Published on NZ Poetry Shelf"
+  },
+  {
+    num: "No. 83",
+    excerpt: "In the pet shop of my imagination,<br>every cockatoo is Brian Wilson<br>and the fish are harmonizing<br>about California girls—<br>their scales iridescent as vinyl.",
+    title: '"California Girls (Translated)"',
+    pub: "Published in Barrelhouse"
+  },
+  {
+    num: "No. 31",
+    excerpt: "The naturalist draws a line<br>between the specimen and the story,<br>but the moth doesn't know<br>it's a metaphor, pinned open<br>under glass, wings still dusty with flight.",
+    title: '"Excerpt XXIV"',
+    pub: "Published in Landfall"
+  }
+];
+
+function showRandomPoem() {
+  const specimen = document.getElementById('poemSpecimen');
+  specimen.style.opacity = '0';
+  specimen.style.transform = 'translateY(6px)';
+  specimen.style.transition = 'opacity 0.3s, transform 0.3s';
+  setTimeout(() => {
+    const poem = poems[Math.floor(Math.random() * poems.length)];
+    document.getElementById('poemNumber').textContent = poem.num;
+    document.getElementById('poemExcerpt').innerHTML = poem.excerpt;
+    document.getElementById('poemTitle').textContent = poem.title;
+    document.getElementById('poemPub').textContent = poem.pub;
+    specimen.style.opacity = '1';
+    specimen.style.transform = 'translateY(0)';
+  }, 300);
+}
+</script>
+
+</body>
+</html>

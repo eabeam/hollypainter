@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Obsolete Jobs Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── PAGE HEADER (documentary style) ── */
+  .page-header {
+    margin-top: 64px;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 500px;
+  }
+  .header-text-area {
+    padding: 5rem 3rem 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .page-breadcrumb {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .page-breadcrumb a {
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .page-breadcrumb a:hover { color: var(--white); }
+  .page-breadcrumb .sep { color: var(--vermillion); margin: 0 0.5rem; }
+  .page-subtitle-top {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .page-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+  .page-subtitle {
+    font-size: 1.2rem;
+    color: rgba(248,248,246,0.7);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-bottom: 2rem;
+  }
+  .page-coauthor {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+    margin-bottom: 2rem;
+  }
+  .page-coauthor strong { color: var(--white); font-weight: 700; }
+  .page-since {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--vermillion);
+    opacity: 0.15;
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  /* Cover image placeholder */
+  .header-image-area {
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .header-image-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .cover-placeholder {
+    text-align: center;
+    padding: 3rem;
+  }
+  .cover-placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+  }
+  .cover-placeholder-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+  .cover-placeholder-file {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.25);
+    margin-top: 0.75rem;
+    word-break: break-all;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* ── DESCRIPTION ── */
+  .project-description {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .project-description-text p {
+    font-size: 1.1rem;
+    color: rgba(248,248,246,0.85);
+    line-height: 1.9;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+  .project-description-text p:last-child { margin-bottom: 0; }
+
+  /* Sidebar stats */
+  .project-sidebar {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--off-black);
+  }
+  .sidebar-item {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .sidebar-item:last-child { border-bottom: none; }
+  .sidebar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-value {
+    font-size: 1rem;
+    color: var(--white);
+    font-weight: 500;
+  }
+  .sidebar-value a {
+    color: var(--white);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    transition: border-color 0.2s;
+  }
+  .sidebar-value a:hover {
+    border-color: var(--vermillion);
+  }
+
+  /* ── QUOTE STRIP ── */
+  .quote-strip {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .quote-strip-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 6px 1fr;
+    gap: 0;
+  }
+  .quote-strip-bar {
+    background: var(--vermillion);
+  }
+  .quote-strip-content {
+    padding: 3.5rem 3rem;
+  }
+  .quote-strip-text {
+    font-size: 1.4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(248,248,246,0.8);
+    line-height: 1.7;
+    max-width: 800px;
+    margin-bottom: 1rem;
+  }
+  .quote-strip-attr {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── EXTERNAL LINK BLOCK ── */
+  .external-link-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .ext-link-card {
+    background: var(--black);
+    padding: 2.5rem;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.3s;
+    position: relative;
+    display: block;
+  }
+  .ext-link-card:hover { background: var(--off-black); }
+  .ext-link-card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .ext-link-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .ext-link-card p {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+  .ext-link-card .arrow {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-size: 1.2rem;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .ext-link-card:hover .arrow {
+    color: var(--vermillion);
+    transform: translate(4px, -4px);
+  }
+
+  /* ── BUTTONS ── */
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .page-header-inner { grid-template-columns: 1fr; }
+    .header-image-area {
+      min-height: 300px;
+      border-left: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .header-text-area { padding: 4rem 2rem 3rem; }
+    .page-title { font-size: 2.5rem; }
+    .project-description { grid-template-columns: 1fr; gap: 2rem; }
+    .external-link-block { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 3rem 1.25rem; }
+    .header-text-area { padding: 3rem 1.25rem 2rem; }
+    .page-title { font-size: 2rem; }
+    .section-title { font-size: 1.8rem; }
+    .quote-strip-content { padding: 2rem 1.5rem; }
+    .quote-strip-text { font-size: 1.1rem; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="option-b-crossword-grid.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-crossword-grid.html#roles" class="active">Academic</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#about">About</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="header-text-area">
+      <div class="page-breadcrumb anim-up">
+        <a href="option-b-crossword-grid.html">Home</a>
+        <span class="sep">//</span>
+        <a href="option-b-crossword-grid.html#roles">Academic</a>
+        <span class="sep">//</span>
+        Obsolete Jobs
+      </div>
+      <div class="page-subtitle-top anim-up d1">Research Project</div>
+      <h1 class="page-title anim-up d1">Obsolete Jobs<br>Project</h1>
+      <p class="page-subtitle anim-up d2">Interviewing Americans with jobs in danger of becoming obsolete</p>
+      <div class="page-coauthor anim-up d2">With economist <strong>EeCheng Ong</strong></div>
+      <div class="cta-row anim-up d3">
+        <a href="https://obsoleteontheroad.wordpress.com/" target="_blank" class="btn-fill">Visit Project Site &#8599;</a>
+        <a href="option-b-crossword-grid.html#books" class="btn-ghost">All Books</a>
+      </div>
+      <div class="page-since">2014</div>
+    </div>
+    <div class="header-image-area anim-up d3">
+      <img src="../site-educenter/static/uploads/wp/2014-10-17-14.06.44-2-682x1024.jpg" alt="Obsolete Jobs Project" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT DESCRIPTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">About the Project</h2>
+    </div>
+    <div class="project-description">
+      <div class="project-description-text">
+        <p>Since 2014, Holly has been interviewing and photographing Americans with jobs that are in danger of becoming obsolete in the United States, some very soon.</p>
+        <p>The book she is writing with economist EeCheng Ong uses these interviews to foreground workers in the story of our economy and how it's changing. Economics textbooks offer the big picture on automation, globalization, and trade. This project complements that understanding with in-depth conversations with real people who've witnessed the shifts firsthand.</p>
+      </div>
+      <div class="project-sidebar">
+        <div class="sidebar-item">
+          <div class="sidebar-label">Started</div>
+          <div class="sidebar-value">2014</div>
+        </div>
+        <div class="sidebar-item">
+          <div class="sidebar-label">Format</div>
+          <div class="sidebar-value">Interviews &amp; Photography</div>
+        </div>
+        <div class="sidebar-item">
+          <div class="sidebar-label">Co-Author</div>
+          <div class="sidebar-value">EeCheng Ong (Economist)</div>
+        </div>
+        <div class="sidebar-item">
+          <div class="sidebar-label">Status</div>
+          <div class="sidebar-value">Book in progress</div>
+        </div>
+        <div class="sidebar-item">
+          <div class="sidebar-label">Project Site</div>
+          <div class="sidebar-value"><a href="https://obsoleteontheroad.wordpress.com/" target="_blank">obsoleteontheroad.wordpress.com &#8599;</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE STRIP -->
+<div class="quote-strip">
+  <div class="quote-strip-inner">
+    <div class="quote-strip-bar"></div>
+    <div class="quote-strip-content">
+      <div class="quote-strip-text">"Economics textbooks offer the big picture on automation, globalization, and trade. Our project complements that understanding with in-depth conversations with real people who've witnessed the shifts firsthand."</div>
+      <div class="quote-strip-attr">&mdash; Holly Painter &amp; EeCheng Ong</div>
+    </div>
+  </div>
+</div>
+
+<!-- LINKS -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Explore</h2>
+    </div>
+    <div class="external-link-block">
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank" class="ext-link-card">
+        <div class="ext-link-card-tag">Project Website</div>
+        <h3>Obsolete on the Road</h3>
+        <p>Interviews, photographs, and stories from the ongoing project documenting Americans whose work is disappearing.</p>
+        <span class="arrow">&#8599;</span>
+      </a>
+      <a href="option-b-crossword-grid.html#books" class="ext-link-card">
+        <div class="ext-link-card-tag">All Books</div>
+        <h3>Holly Painter's Books</h3>
+        <p>Poetry collections, translations, and cross-genre work. Browse the full catalog.</p>
+        <span class="arrow">&#8599;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#about">About</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &#8599;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &#8599;</a>
+      <a href="option-b-teaching.html">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &#8599;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>

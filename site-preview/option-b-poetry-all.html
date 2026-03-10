@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — All Poetry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* -- GRID TEXTURE -- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* -- NAV -- */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* -- PAGE HEADER -- */
+  .page-header {
+    margin-top: 64px;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .page-header h1 .accent {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--vermillion);
+  }
+  .page-header .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.8;
+    max-width: 700px;
+    margin-bottom: 0.75rem;
+  }
+  .page-header .subtitle em {
+    font-style: normal;
+    color: var(--light);
+  }
+  .page-header .note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(136,136,136,0.6);
+    letter-spacing: 0.03em;
+    max-width: 600px;
+  }
+
+  /* -- FILTER BAR -- */
+  .filter-bar {
+    padding: 1.5rem 2rem;
+    background: var(--off-black);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 64px;
+    z-index: 50;
+  }
+  .filter-bar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-search {
+    flex: 1;
+    min-width: 240px;
+    max-width: 400px;
+    position: relative;
+  }
+  .filter-search input {
+    width: 100%;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--white);
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.7rem 1rem 0.7rem 2.4rem;
+    letter-spacing: 0.03em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .filter-search input::placeholder { color: var(--mid); }
+  .filter-search input:focus { border-color: var(--vermillion); }
+  .filter-search-icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    color: var(--mid);
+    pointer-events: none;
+  }
+  .filter-sort {
+    display: flex;
+    gap: 0;
+  }
+  .filter-sort button {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    color: var(--mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-sort button + button { border-left: none; }
+  .filter-sort button:hover { color: var(--white); }
+  .filter-sort button.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+    background: rgba(232,69,48,0.08);
+  }
+  .filter-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    margin-left: auto;
+  }
+
+  /* -- SECTIONS -- */
+  section {
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--mid);
+  }
+
+  /* -- POETRY GRID -- */
+  .poetry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .poem-card {
+    background: var(--black);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .poem-card:hover { background: rgba(255,255,255,0.02); }
+  .poem-card-cover {
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-card-cover .cover-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 0.5rem;
+    line-height: 1.3;
+  }
+  .poem-card-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .poem-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.35;
+  }
+  .poem-card-journal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+  .poem-card-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(136,136,136,0.5);
+    letter-spacing: 0.08em;
+  }
+  .poem-card .featured-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--vermillion);
+    border-radius: 50%;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  /* -- NOTE SECTION -- */
+  .note-section {
+    padding: 3rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .note-section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .note-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(136,136,136,0.6);
+    line-height: 2;
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+  .back-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--vermillion);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--white); }
+
+  /* -- FOOTER -- */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* -- ANIMATIONS -- */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+
+  /* -- RESPONSIVE -- */
+  @media (max-width: 1024px) {
+    .page-header h1 { font-size: 3rem; }
+    .poetry-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 3rem 1.25rem; }
+    .page-header { padding: 4rem 1.25rem 2rem; }
+    .page-header h1 { font-size: 2.2rem; }
+    .section-title { font-size: 1.6rem; }
+    .filter-bar { padding: 1rem 1.25rem; }
+    .filter-bar-inner { gap: 0.75rem; }
+    .filter-search { min-width: 100%; }
+    .filter-count { margin-left: 0; }
+    .poetry-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .poem-card-cover { aspect-ratio: 3/2; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="option-b-crossword-grid.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="#" class="active">Poetry</a>
+      <a href="option-b-crossword-grid.html#roles">Academic</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1 class="anim-up">All <span class="accent">Poetry</span></h1>
+    <p class="subtitle anim-up d1">
+      Complete catalog of published poems &mdash; displayed as <em>&ldquo;Poem Title&rdquo;</em> in <em>Journal</em>
+    </p>
+    <p class="note anim-up d2">Organized by year when available. Cover images show the journal issue.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <div class="filter-search">
+      <span class="filter-search-icon">&#9906;</span>
+      <input type="text" placeholder="Filter by title or journal..." id="searchInput" />
+    </div>
+    <div class="filter-sort">
+      <button class="active" data-sort="year">By Year</button>
+      <button data-sort="journal">By Journal</button>
+      <button data-sort="title">By Title</button>
+    </div>
+    <div class="filter-count">93 poems</div>
+  </div>
+</div>
+
+<!-- FEATURED SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Featured</h2>
+      <p class="section-desc">Selected highlights from journals worldwide</p>
+    </div>
+
+    <div class="poetry-grid" id="featuredGrid">
+
+      <!-- Featured: "Afternoon" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a3a5a,#2a6a8a);">
+          <img src="/uploads/wp/1-5x1-5.jpg" alt="Swimming with Elephants cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Afternoon&rdquo;</div>
+          <div class="poem-card-journal">Swimming with Elephants</div>
+        </div>
+      </div>
+
+      <!-- Featured: Landfall 211 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a4a2a,#4a7a4a);">
+          <img src="/uploads/wp/landfall-221-cover.jpg" alt="Landfall 211 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Landfall 211</div>
+        </div>
+      </div>
+
+      <!-- Featured: "January, Lake Champlain" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a5a,#6a4a9a);">
+          <img src="/uploads/wp/Apeiron-854x1024.png" alt="Apeiron cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;January, Lake Champlain&rdquo;</div>
+          <div class="poem-card-journal">Apeiron</div>
+        </div>
+      </div>
+
+      <!-- Featured: Barrelhouse -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#5a2a1a,#9a5a3a);">
+          <img src="/uploads/wp/Barrelhouse.png" alt="Barrelhouse cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Barrelhouse</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Cryptic Crossword XXXIII" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a1035,#3d1f6d);">
+          <img src="/uploads/wp/Bombay-Gin-cover-682x1024.jpg" alt="Bombay Gin cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Cryptic Crossword XXXIII&rdquo;</div>
+          <div class="poem-card-journal">Bombay Gin</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Field Trip" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a3a1a,#8a7a3a);">
+          <img src="/uploads/wp/Borderlands-cover.png" alt="Borderlands cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Field Trip&rdquo;</div>
+          <div class="poem-card-journal">Borderlands</div>
+        </div>
+      </div>
+
+      <!-- Featured: Literary Shanghai set 1 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#6a1a1a,#a03030);">
+          <img src="/uploads/wp/cropped-Logo-01-white.jpg" alt="Literary Shanghai cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>5 poems (set 1)</div>
+          <div class="poem-card-journal">Literary Shanghai</div>
+        </div>
+      </div>
+
+      <!-- Featured: Literary Shanghai set 2 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#7a2a2a,#b04040);">
+          <img src="/uploads/wp/cropped-Logo-01-white.jpg" alt="Literary Shanghai cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>5 poems (set 2)</div>
+          <div class="poem-card-journal">Literary Shanghai</div>
+        </div>
+      </div>
+
+      <!-- Featured: Nimrod -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a2a4a,#4a4a7a);">
+          <img src="/uploads/wp/Nimrod-Cover-697x1024.jpg" alt="Nimrod cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 cryptic crosswords</div>
+          <div class="poem-card-journal">Nimrod</div>
+        </div>
+      </div>
+
+      <!-- Featured: Delmarva Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a4a4a,#3a7a7a);">
+          <img src="/uploads/wp/Delmarva-review-cover.jpg" alt="Delmarva Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>3 poems</div>
+          <div class="poem-card-journal">Delmarva Review</div>
+        </div>
+      </div>
+
+      <!-- Featured: "The Tragedy of Space Opera" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#0a1a3a,#1a3a6a);">
+          <img src="/uploads/wp/Fourth-River-682x1024.jpg" alt="4th River cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;The Tragedy of Space Opera&rdquo;</div>
+          <div class="poem-card-journal">4th River</div>
+        </div>
+      </div>
+
+      <!-- Featured: "The First Hundred Days" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a1a4a,#6a3a7a);">
+          <img src="/uploads/wp/FrancisHouse.png" alt="Freezeray cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;The First Hundred Days&rdquo;</div>
+          <div class="poem-card-journal">Freezeray</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Boys on the Beach" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a5a6a,#3a9ab5);">
+          <img src="/uploads/wp/hawaii-review-cover-001.jpg" alt="Hawai'i Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Boys on the Beach&rdquo;</div>
+          <div class="poem-card-journal">Hawai'i Review</div>
+        </div>
+      </div>
+
+      <!-- Featured: "In Which We Depart" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a2a3a,#7a4a5a);">
+          <img src="/uploads/wp/huecry.jpg" alt="Hue and Cry cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;In Which We Depart&rdquo;</div>
+          <div class="poem-card-journal">Hue and Cry</div>
+        </div>
+      </div>
+
+      <!-- Featured: JAAM 30 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a3a2a,#4a6a4a);">
+          <img src="/uploads/wp/jaam-cover-001.jpg" alt="JAAM 30 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">JAAM 30</div>
+        </div>
+      </div>
+
+      <!-- Featured: Lunch Ticket -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#5a3a0a,#9a7a3a);">
+          <img src="/uploads/wp/Lunch-Ticket-800x1024.png" alt="Lunch Ticket cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Lunch Ticket</div>
+        </div>
+      </div>
+
+      <!-- Featured: Imaginary Syllabi -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a3a0a,#6a6a2a);">
+          <img src="/uploads/wp/imaginary-syllabi-cover.jpg" alt="Imaginary Syllabi cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>Imaginary Syllabi</div>
+          <div class="poem-card-journal">Imaginary Syllabi</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Shipwrecked I Arrived" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a3a2a,#3a6a4a);">
+          <img src="/uploads/wp/nz-listener-cover.jpg" alt="NZ Listener cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Shipwrecked I Arrived&rdquo;</div>
+          <div class="poem-card-journal">NZ Listener</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Mount Ebenezer Roadhouse" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a2a0a,#8a5a2a);">
+          <img src="/uploads/wp/NZ-Poetry-Shelf1.png" alt="NZ Poetry Shelf cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Mount Ebenezer Roadhouse&rdquo;</div>
+          <div class="poem-card-journal">NZ Poetry Shelf</div>
+        </div>
+      </div>
+
+      <!-- Featured: Landfall 218 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a5a2a,#4a8a4a);">
+          <img src="/uploads/wp/landfall-218-cover.jpg" alt="Landfall 218 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Landfall 218</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Picton's Morning Crust" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a5a2a,#5a8a4a);">
+          <img src="/uploads/wp/landfall-223-cover.jpg" alt="Landfall 223 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Picton's Morning Crust&rdquo;</div>
+          <div class="poem-card-journal">Landfall 223</div>
+        </div>
+      </div>
+
+      <!-- Featured: Riprap 36 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a3a,#6a4a6a);">
+          <img src="/uploads/wp/Riprap-cover-682x1024.jpg" alt="Riprap cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Riprap 36</div>
+        </div>
+      </div>
+
+      <!-- Featured: Roads Taken -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a3a2a,#7a6a4a);">
+          <img src="/uploads/wp/Roads-Takenn-cover-681x1024.jpeg" alt="Roads Taken cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Roads Taken</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Sonoran Song" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#6a4a0a,#b08a2a);">
+          <img src="/uploads/wp/cream-city-review-cover.jpg" alt="Cream City Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Sonoran Song&rdquo;</div>
+          <div class="poem-card-journal">Cream City Review</div>
+        </div>
+      </div>
+
+      <!-- Featured: Spectrum -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a5a,#4a3a8a);">
+          <img src="/uploads/wp/Spectrum-Vol_-63-Covers-v_-2-667x1024.png" alt="Spectrum cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>3 poems</div>
+          <div class="poem-card-journal">Spectrum</div>
+        </div>
+      </div>
+
+      <!-- Featured: Sport 43 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a2a3a,#3a5a6a);">
+          <img src="/uploads/wp/sportcover.png" alt="Sport 43 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Sport 43</div>
+        </div>
+      </div>
+
+      <!-- Featured: "Tell Me a Story" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a1a2a,#7a3a4a);">
+          <img src="/uploads/wp/Storm_Cellar_cover_3.2-682x1024.jpg" alt="Storm Cellar cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>&ldquo;Tell Me a Story&rdquo;</div>
+          <div class="poem-card-journal">Storm Cellar</div>
+        </div>
+      </div>
+
+      <!-- Featured: Turbine -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a3a4a,#4a6a7a);">
+          <img src="/uploads/wp/turbine-cover-1.png" alt="Turbine cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Turbine</div>
+        </div>
+      </div>
+
+      <!-- Featured: Sport 40 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a3a4a,#3a6a7a);">
+          <img src="/uploads/wp/sport-cover1.jpg" alt="Sport 40 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title"><span class="featured-dot"></span>2 poems</div>
+          <div class="poem-card-journal">Sport 40</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ALL PUBLICATIONS SECTION -->
+<section style="border-top: 1px solid rgba(255,255,255,0.06);">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">All Publications</h2>
+      <p class="section-desc">Complete journal and anthology appearances</p>
+    </div>
+
+    <div class="poetry-grid" id="allGrid">
+
+      <!-- Arena -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a2a2a,#4a4a4a);">
+          <img src="/uploads/wp/Arena-cover.jpg" alt="Arena cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Multiple issues</div>
+          <div class="poem-card-journal">Arena</div>
+        </div>
+      </div>
+
+      <!-- "Because I'm Thirty-Five and Not Fifteen" -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a3a2a,#5a5a4a);">
+          <img src="/uploads/wp/plainsongs-cover-663x1024.jpeg" alt="Plainsongs cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">&ldquo;Because I'm Thirty-Five and Not Fifteen&rdquo;</div>
+          <div class="poem-card-journal">Plainsongs</div>
+        </div>
+      </div>
+
+      <!-- Carbon Culture -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a2a1a,#3a4a3a);">
+          <img src="/uploads/wp/Carbon-Culture-cover.png" alt="Carbon Culture cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Carbon Culture</div>
+          <div class="poem-card-journal">Carbon Culture</div>
+        </div>
+      </div>
+
+      <!-- Collapsar -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#0a0a2a,#2a2a5a);">
+          <img src="/uploads/wp/Collapsar-cover.png" alt="Collapsar cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Collapsar</div>
+          <div class="poem-card-journal">Collapsar</div>
+        </div>
+      </div>
+
+      <!-- Crack the Spine -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a1a,#5a4a3a);">
+          <img src="/uploads/wp/Crack-the-Spine-cover.png" alt="Crack the Spine cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Crack the Spine</div>
+          <div class="poem-card-journal">Crack the Spine</div>
+        </div>
+      </div>
+
+      <!-- Cryptic Crosswords XXIV-XXX -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a1a3a,#3a3a6a);">
+          <img src="/uploads/wp/cropped-Logo-01-white.jpg" alt="Alluvium cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Cryptic Crosswords XXIV&ndash;XXX</div>
+          <div class="poem-card-journal">Alluvium</div>
+        </div>
+      </div>
+
+      <!-- Dead Flowers -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a1a,#4a2a2a);">
+          <img src="/uploads/wp/dead-flowers-cover.jpg" alt="Dead Flowers cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Dead Flowers</div>
+          <div class="poem-card-journal">Dead Flowers</div>
+        </div>
+      </div>
+
+      <!-- Decades Review 11 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a2a3a,#4a4a5a);">
+          <img src="/uploads/wp/Decades-Review-11-cover-796x1024.jpg" alt="Decades Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Decades Review 11</div>
+          <div class="poem-card-journal">Decades Review</div>
+        </div>
+      </div>
+
+      <!-- Dr Hurley's (2 entries) -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a1a3a,#5a3a5a);">
+          <img src="/uploads/wp/Dr-Hurleys-cover.png" alt="Dr Hurley's cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">2 entries</div>
+          <div class="poem-card-journal">Dr Hurley's</div>
+        </div>
+      </div>
+
+      <!-- Flyover -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a3a1a,#4a5a3a);">
+          <img src="/uploads/wp/Flyover-cover.png" alt="Flyover cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Flyover</div>
+          <div class="poem-card-journal">Flyover</div>
+        </div>
+      </div>
+
+      <!-- Hamilton Stone -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a3a3a,#5a5a5a);">
+          <img src="/uploads/wp/Hamilton-Stone-cover.png" alt="Hamilton Stone cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Hamilton Stone</div>
+          <div class="poem-card-journal">Hamilton Stone</div>
+        </div>
+      </div>
+
+      <!-- m58 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a1a2a,#2a2a4a);">
+          <img src="/uploads/wp/m58.co_.uk_.png" alt="m58 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">m58</div>
+          <div class="poem-card-journal">m58</div>
+        </div>
+      </div>
+
+      <!-- MadHat -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a1a3a,#6a3a5a);">
+          <img src="/uploads/wp/MadHat-cover.png" alt="MadHat cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">MadHat</div>
+          <div class="poem-card-journal">MadHat</div>
+        </div>
+      </div>
+
+      <!-- Mezzo Cammin -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a3a,#4a3a5a);">
+          <img src="/uploads/wp/Mezzo-Cammin-cover.png" alt="Mezzo Cammin cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Mezzo Cammin</div>
+          <div class="poem-card-journal">Mezzo Cammin</div>
+        </div>
+      </div>
+
+      <!-- Museum of Americana -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a1a,#6a5a3a);">
+          <img src="/uploads/wp/museum-of-americana-cover.jpg" alt="Museum of Americana cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Museum of Americana</div>
+          <div class="poem-card-journal">Museum of Americana</div>
+        </div>
+      </div>
+
+      <!-- NNER 40 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a3a3a,#3a5a5a);">
+          <img src="/uploads/wp/NNER-40-661x1024.png" alt="NNER 40 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">NNER 40</div>
+          <div class="poem-card-journal">NNER</div>
+        </div>
+      </div>
+
+      <!-- ODT -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a2a1a,#4a4a3a);">
+          <img src="/uploads/wp/ODT-cover.png" alt="ODT cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">ODT</div>
+          <div class="poem-card-journal">ODT</div>
+        </div>
+      </div>
+
+      <!-- Outside In -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a2a4a,#3a4a6a);">
+          <img src="/uploads/wp/Outside-In.png" alt="Outside In cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Outside In</div>
+          <div class="poem-card-journal">Outside In</div>
+        </div>
+      </div>
+
+      <!-- Palaver -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a1a1a,#5a3a3a);">
+          <img src="/uploads/wp/palaver-cover-807x1024.jpg" alt="Palaver cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Palaver</div>
+          <div class="poem-card-journal">Palaver</div>
+        </div>
+      </div>
+
+      <!-- Red Savina -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#5a1a0a,#8a3a2a);">
+          <img src="/uploads/wp/Red-Savina-cover.png" alt="Red Savina cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Red Savina</div>
+          <div class="poem-card-journal">Red Savina</div>
+        </div>
+      </div>
+
+      <!-- Right Hand Pointing -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a3a3a,#4a5a5a);">
+          <img src="/uploads/wp/right-hand-pointing-cover.png" alt="Right Hand Pointing cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Right Hand Pointing</div>
+          <div class="poem-card-journal">Right Hand Pointing</div>
+        </div>
+      </div>
+
+      <!-- Rue Scribe -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a4a,#5a4a6a);">
+          <img src="/uploads/wp/Rue-Scribe.png" alt="Rue Scribe cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Rue Scribe</div>
+          <div class="poem-card-journal">Rue Scribe</div>
+        </div>
+      </div>
+
+      <!-- s:tick -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a1a1a,#3a3a3a);">
+          <img src="/uploads/wp/stick-cover-222x300.png" alt="s:tick cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">s:tick</div>
+          <div class="poem-card-journal">s:tick</div>
+        </div>
+      </div>
+
+      <!-- Scrambler -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a2a,#4a3a4a);">
+          <img src="/uploads/wp/Scrambler-cover.png" alt="Scrambler cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Scrambler</div>
+          <div class="poem-card-journal">Scrambler</div>
+        </div>
+      </div>
+
+      <!-- Softblow -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a2a2a,#3a4a4a);">
+          <img src="/uploads/wp/Screenshot-2016-05-16-20.46.43-248x300.png" alt="Softblow cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Softblow</div>
+          <div class="poem-card-journal">Softblow</div>
+        </div>
+      </div>
+
+      <!-- Shot Glass -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a2a1a,#6a4a3a);">
+          <img src="/uploads/wp/Shot-Glass-cover.png" alt="Shot Glass cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Shot Glass</div>
+          <div class="poem-card-journal">Shot Glass</div>
+        </div>
+      </div>
+
+      <!-- Specter -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#0a1a2a,#1a2a4a);">
+          <img src="/uploads/wp/specter-cover.png" alt="Specter cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Specter</div>
+          <div class="poem-card-journal">Specter</div>
+        </div>
+      </div>
+
+      <!-- Spork -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a3a1a,#5a5a3a);">
+          <img src="/uploads/wp/spork-cover.png" alt="Spork cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Spork</div>
+          <div class="poem-card-journal">Spork</div>
+        </div>
+      </div>
+
+      <!-- Tattoo Highway -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a0a,#5a3a1a);">
+          <img src="/uploads/wp/Tattoo-Highway-cover.png" alt="Tattoo Highway cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Tattoo Highway</div>
+          <div class="poem-card-journal">Tattoo Highway</div>
+        </div>
+      </div>
+
+      <!-- Three QR -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a3a1a,#3a5a3a);">
+          <img src="/uploads/wp/three-qr-cover.png" alt="Three QR cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Three QR</div>
+          <div class="poem-card-journal">Three QR</div>
+        </div>
+      </div>
+
+      <!-- Ucity Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a2a4a,#4a4a6a);">
+          <img src="/uploads/wp/ucity-review-cover.png" alt="Ucity Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Ucity Review</div>
+          <div class="poem-card-journal">Ucity Review</div>
+        </div>
+      </div>
+
+      <!-- Vellichor -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a2a2a,#5a4a4a);">
+          <img src="/uploads/wp/Paragon-Press-Vellichor-800x1024.png" alt="Vellichor cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Vellichor</div>
+          <div class="poem-card-journal">Paragon Press</div>
+        </div>
+      </div>
+
+      <!-- Watershed Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a4a3a,#3a6a5a);">
+          <img src="/uploads/wp/Watershed-cover.jpg" alt="Watershed Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">&ldquo;Little Obedience,&rdquo; &ldquo;A Special Person,&rdquo; and &ldquo;Obsolescence&rdquo;</div>
+          <div class="poem-card-journal">Watershed Review</div>
+        </div>
+      </div>
+
+      <!-- Whiskey Island -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#4a3a0a,#7a6a2a);">
+          <img src="/uploads/wp/Whiskey-Island-cover-680x1024.jpg" alt="Whiskey Island cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Whiskey Island</div>
+          <div class="poem-card-journal">Whiskey Island</div>
+        </div>
+      </div>
+
+      <!-- Whistling Fire -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#5a2a0a,#8a4a1a);">
+          <img src="/uploads/wp/Whistling-Fire-cover.png" alt="Whistling Fire cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Whistling Fire</div>
+          <div class="poem-card-journal">Whistling Fire</div>
+        </div>
+      </div>
+
+      <!-- Wilde -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a1a4a,#4a3a6a);">
+          <img src="/uploads/wp/wilde-cover.jpg" alt="Wilde cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Wilde</div>
+          <div class="poem-card-journal">Wilde</div>
+        </div>
+      </div>
+
+      <!-- Worcester Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#3a1a2a,#6a3a4a);">
+          <img src="/uploads/wp/Worcester-Review-685x1024.jpg" alt="Worcester Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Worcester Review</div>
+          <div class="poem-card-journal">Worcester Review</div>
+        </div>
+      </div>
+
+      <!-- Random Sample Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#1a2a3a,#2a4a5a);">
+          <img src="/uploads/wp/random-sample-1024x724.png" alt="Random Sample Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">Random Sample Review</div>
+          <div class="poem-card-journal">Random Sample Review</div>
+        </div>
+      </div>
+
+      <!-- BMP Voices -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background:linear-gradient(135deg,#2a3a2a,#3a5a3a);">
+          <img src="/uploads/wp/Screen-Shot-2019-04-20-at-7.26.09-PM.png" alt="BMP Voices cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-body">
+          <div class="poem-card-title">BMP Voices</div>
+          <div class="poem-card-journal">BMP Voices</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NOTE SECTION -->
+<div class="note-section">
+  <div class="note-section-inner">
+    <p class="note-text">
+      Note: Some links to original publications may be broken. Publication years are being collected &mdash; contact Holly to confirm dates.
+    </p>
+    <a href="option-b-poetry.html" class="back-link">&larr; Back to Featured Poetry</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &#8599;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &#8599;</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &#8599;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+<script>
+// Cosmetic filter/sort interactivity
+document.querySelectorAll('.filter-sort button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-sort button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Simple search filter (filters visible poem cards by title/journal text)
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.poem-card');
+    let visibleCount = 0;
+    cards.forEach(card => {
+      const title = (card.querySelector('.poem-card-title') || {}).textContent || '';
+      const journal = (card.querySelector('.poem-card-journal') || {}).textContent || '';
+      const match = !query || title.toLowerCase().includes(query) || journal.toLowerCase().includes(query);
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+    const countEl = document.querySelector('.filter-count');
+    if (countEl) countEl.textContent = visibleCount + ' poem' + (visibleCount !== 1 ? 's' : '');
+  });
+}
+</script>
+
+</body>
+</html>

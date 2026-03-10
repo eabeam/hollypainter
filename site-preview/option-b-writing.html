@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Writing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 6rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-top: 64px;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .page-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CATEGORY SECTIONS ── */
+  .category-section {
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .category-section:first-of-type {
+    padding-top: 4rem;
+  }
+  .category-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .category-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .category-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .category-title {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* ── WRITING TABLE ── */
+  .writing-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .writing-table thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .writing-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+  .writing-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .writing-table tbody tr.has-link { cursor: pointer; }
+  .writing-table td {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .writing-table .title-col {
+    font-weight: 600;
+    color: var(--white);
+  }
+  .writing-table .title-col a {
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .writing-table .title-col a:hover {
+    color: var(--vermillion);
+  }
+  .writing-table .pub-col {
+    color: var(--light);
+    font-size: 0.85rem;
+  }
+  .writing-table .type-col {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    width: 180px;
+  }
+  .writing-table .link-col {
+    width: 80px;
+    text-align: right;
+  }
+  .writing-table .link-col a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .writing-table .link-col a:hover {
+    color: var(--white);
+  }
+  .tbd-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    font-style: italic;
+    margin-left: 0.5rem;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 0;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+  .d5 { animation-delay: 0.65s; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .page-title { font-size: 3rem; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .category-section { padding: 3rem 1.25rem 1.5rem; }
+    .page-header { padding: 4rem 1.25rem 2rem; }
+    .page-title { font-size: 2.5rem; }
+    .category-title { font-size: 1.6rem; }
+    .writing-table .type-col { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="option-b-crossword-grid.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-writing.html" class="active">Writing</a>
+      <a href="option-b-crossword-grid.html#roles">Academic</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1 class="page-title anim-up">Writing</h1>
+    <p class="page-subtitle anim-up d1">Essays, fiction, interviews, and other prose</p>
+  </div>
+</div>
+
+<!-- FICTION -->
+<div class="category-section anim-up d2">
+  <div class="category-inner">
+    <div class="category-header">
+      <span class="category-number">01</span>
+      <h2 class="category-title">Fiction</h2>
+    </div>
+    <table class="writing-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Publication</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="has-link" onclick="window.open('http://whiskeypaper.com/dennys-by-holly-painter/','_blank')">
+          <td class="title-col"><a href="http://whiskeypaper.com/dennys-by-holly-painter/" target="_blank">Denny's</a></td>
+          <td class="pub-col">WhiskeyPaper</td>
+          <td class="type-col">Fiction</td>
+          <td class="link-col"><a href="http://whiskeypaper.com/dennys-by-holly-painter/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://www.press53.com/Everywhere_Stories.html','_blank')">
+          <td class="title-col"><a href="http://www.press53.com/Everywhere_Stories.html" target="_blank">Jean</a></td>
+          <td class="pub-col">Everywhere Stories: Short Fiction for a Small Planet</td>
+          <td class="type-col">Fiction</td>
+          <td class="link-col"><a href="http://www.press53.com/Everywhere_Stories.html" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://www.amazon.com/Sweet-As-Contemporary-Short-Stories-ebook/dp/B00NTLG8HQ/','_blank')">
+          <td class="title-col"><a href="http://www.amazon.com/Sweet-As-Contemporary-Short-Stories-ebook/dp/B00NTLG8HQ/" target="_blank">Phillip's Face</a></td>
+          <td class="pub-col">Sweet As: Contemporary Short Stories by New Zealanders</td>
+          <td class="type-col">Fiction</td>
+          <td class="link-col"><a href="http://www.amazon.com/Sweet-As-Contemporary-Short-Stories-ebook/dp/B00NTLG8HQ/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://www.pendulinepress.com/author-article-archives/repco/','_blank')">
+          <td class="title-col"><a href="http://www.pendulinepress.com/author-article-archives/repco/" target="_blank">Repco</a></td>
+          <td class="pub-col">Penduline Press</td>
+          <td class="type-col">Fiction</td>
+          <td class="link-col"><a href="http://www.pendulinepress.com/author-article-archives/repco/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('https://cagibilit.com/rain-in-big-river-saskatchewan/','_blank')">
+          <td class="title-col"><a href="https://cagibilit.com/rain-in-big-river-saskatchewan/" target="_blank">Rain In Big River Saskatchewan</a></td>
+          <td class="pub-col">Cagibili</td>
+          <td class="type-col">Fiction</td>
+          <td class="link-col"><a href="https://cagibilit.com/rain-in-big-river-saskatchewan/" target="_blank">Read &#8599;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ESSAYS -->
+<div class="category-section anim-up d3">
+  <div class="category-inner">
+    <div class="category-header">
+      <span class="category-number">02</span>
+      <h2 class="category-title">Essays</h2>
+    </div>
+    <table class="writing-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Publication</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="has-link" onclick="window.open('http://momandnotmom.wordpress.com/2014/03/27/on-marriage/','_blank')">
+          <td class="title-col"><a href="http://momandnotmom.wordpress.com/2014/03/27/on-marriage/" target="_blank">On Marriage</a></td>
+          <td class="pub-col">MomandNotMom</td>
+          <td class="type-col">Essay</td>
+          <td class="link-col"><a href="http://momandnotmom.wordpress.com/2014/03/27/on-marriage/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://www.flash-frontier.com/2018/04/30/painter-naturalhistory/','_blank')">
+          <td class="title-col"><a href="http://www.flash-frontier.com/2018/04/30/painter-naturalhistory/" target="_blank">On writing Excerpts from a Natural History</a></td>
+          <td class="pub-col">Flash Frontier</td>
+          <td class="type-col">Essay</td>
+          <td class="link-col"><a href="http://www.flash-frontier.com/2018/04/30/painter-naturalhistory/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('https://www.splitrockreview.org/news/contributor-spotlight-holly-painter/10/13/2018','_blank')">
+          <td class="title-col"><a href="https://www.splitrockreview.org/news/contributor-spotlight-holly-painter/10/13/2018" target="_blank">On Cryptic Crossword IX</a></td>
+          <td class="pub-col">Split Rock Review</td>
+          <td class="type-col">Contributor Spotlight</td>
+          <td class="link-col"><a href="https://www.splitrockreview.org/news/contributor-spotlight-holly-painter/10/13/2018" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://bodyliterature.com/2014/07/30/the-poem-jack-kerouacs-11th-chorus-of-desolation-blues/','_blank')">
+          <td class="title-col"><a href="http://bodyliterature.com/2014/07/30/the-poem-jack-kerouacs-11th-chorus-of-desolation-blues/" target="_blank">The Poem: Jack Kerouac's 11th Chorus of Desolation Blues</a></td>
+          <td class="pub-col">BODY</td>
+          <td class="type-col">Essay</td>
+          <td class="link-col"><a href="http://bodyliterature.com/2014/07/30/the-poem-jack-kerouacs-11th-chorus-of-desolation-blues/" target="_blank">Read &#8599;</a></td>
+        </tr>
+        <tr class="has-link" onclick="window.open('http://community.good.is/do/story/95688B91','_blank')">
+          <td class="title-col"><a href="http://community.good.is/do/story/95688B91" target="_blank">A very short essay about volunteering with 826michigan</a></td>
+          <td class="pub-col">GOOD Magazine</td>
+          <td class="type-col">Essay</td>
+          <td class="link-col"><a href="http://community.good.is/do/story/95688B91" target="_blank">Read &#8599;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- INTERVIEW -->
+<div class="category-section anim-up d4">
+  <div class="category-inner">
+    <div class="category-header">
+      <span class="category-number">03</span>
+      <h2 class="category-title">Interview</h2>
+    </div>
+    <table class="writing-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Publication</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="has-link" onclick="window.open('http://www.pendulinepress.com/interview/interview-with-holly-painter/','_blank')">
+          <td class="title-col"><a href="http://www.pendulinepress.com/interview/interview-with-holly-painter/" target="_blank">Interview with Holly Painter</a></td>
+          <td class="pub-col">Penduline Press</td>
+          <td class="type-col">Interview</td>
+          <td class="link-col"><a href="http://www.pendulinepress.com/interview/interview-with-holly-painter/" target="_blank">Read &#8599;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- UNKNOWN / TBD -->
+<div class="category-section anim-up d5">
+  <div class="category-inner">
+    <div class="category-header">
+      <span class="category-number">04</span>
+      <h2 class="category-title">Other / TBD</h2>
+    </div>
+    <table class="writing-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Publication</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="title-col">Hymn <span class="tbd-note">(publication TBD)</span></td>
+          <td class="pub-col">--</td>
+          <td class="type-col">TBD</td>
+          <td class="link-col"></td>
+        </tr>
+        <tr>
+          <td class="title-col">USA Today <span class="tbd-note">(details TBD)</span></td>
+          <td class="pub-col">--</td>
+          <td class="type-col">TBD</td>
+          <td class="link-col"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="option-b-crossword-grid.html">Home</a>
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="option-b-writing.html">Writing</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="option-b-crossword-grid.html#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &#8599;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &#8599;</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &#8599;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>

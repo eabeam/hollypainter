@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Featured Poetry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --teal-dark: #14706a;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* -- GRID TEXTURE -- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* -- NAV -- */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* -- HERO / HEADER -- */
+  .page-hero {
+    margin-top: 64px;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-hero-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .page-hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+  .page-hero-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--vermillion);
+  }
+  .page-hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--mid);
+    margin-bottom: 3rem;
+    max-width: 500px;
+  }
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+    width: fit-content;
+  }
+  .stats-bar .stat {
+    padding: 1.25rem 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--light);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .stats-bar .stat:last-child { border-right: none; }
+  .stats-bar .stat strong {
+    color: var(--white);
+    font-weight: 700;
+  }
+  .stats-bar .stat .accent {
+    color: var(--vermillion);
+    font-weight: 700;
+  }
+
+  /* -- SECTIONS -- */
+  section {
+    padding: 6rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* -- POEMS GRID -- */
+  .poems-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .poem-card {
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-card:hover {
+    background: var(--off-black);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    z-index: 2;
+  }
+  .poem-card:hover .poem-card-cover {
+    border-bottom-color: var(--vermillion);
+  }
+  .poem-card-cover {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+    position: relative;
+  }
+  .poem-card-cover .journal-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .poem-card-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .poem-card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+  .poem-card-journal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.03em;
+    margin-top: auto;
+  }
+  .poem-card-tbd {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.03em;
+    margin-top: 0.3rem;
+  }
+
+  /* -- CTA SECTION -- */
+  .cta-section {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: var(--off-black);
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  /* -- FOOTER -- */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* -- ANIMATIONS -- */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+
+  /* -- RESPONSIVE -- */
+  @media (max-width: 1024px) {
+    .page-hero-title { font-size: 3.5rem; }
+    .poems-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar { flex-wrap: wrap; }
+    .stats-bar .stat { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 4rem 1.25rem; }
+    .page-hero { padding: 4rem 1.25rem 3rem; }
+    .page-hero-title { font-size: 2.5rem; }
+    .poems-grid { grid-template-columns: 1fr; }
+    .stats-bar { width: 100%; }
+    .stats-bar .stat { flex: 1; padding: 1rem 1.25rem; font-size: 0.65rem; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+    .cta-buttons { flex-direction: column; }
+    .cta-buttons a { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="option-b-crossword-grid.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="#" class="active">Poetry</a>
+      <a href="option-b-crossword-grid.html#roles">Academic</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO / HEADER -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-hero-number anim-up">01 — POETRY</span>
+    <h1 class="page-hero-title anim-up d1">Featured <span class="outline">Poetry</span></h1>
+    <p class="page-hero-subtitle anim-up d2">Selected publications from journals worldwide</p>
+    <div class="stats-bar anim-up d3">
+      <div class="stat"><span class="accent">93+</span> poems published</div>
+      <div class="stat"><span class="accent">2&times;</span> Pushcart nominee</div>
+      <div class="stat"><span class="accent">4</span> continents</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED POEMS GRID -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Publications</h2>
+    </div>
+
+    <div class="poems-grid">
+
+      <!-- 1. "Afternoon" — Swimming with Elephants -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #e84530, #c73a28);">
+          <img src="../site-educenter/static/uploads/wp/1-5x1-5.jpg" alt="Swimming with Elephants cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Afternoon"</div>
+          <div class="poem-card-journal">Swimming with Elephants</div>
+        </div>
+      </div>
+
+      <!-- 2. 2 poems — Landfall 211 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a8a7d, #14706a);">
+          <img src="../site-educenter/static/uploads/wp/landfall-221-cover.jpg" alt="Landfall 211 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Landfall 211</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Landfall</div>
+        </div>
+      </div>
+
+      <!-- 3. "January, Lake Champlain" — Apeiron -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #2a1a4a, #5a3a8a);">
+          <img src="../site-educenter/static/uploads/wp/Apeiron-854x1024.png" alt="Apeiron cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"January, Lake Champlain"</div>
+          <div class="poem-card-journal">Apeiron</div>
+        </div>
+      </div>
+
+      <!-- 4. 2 poems — Barrelhouse -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #e84530, #a83020);">
+          <img src="../site-educenter/static/uploads/wp/Barrelhouse.png" alt="Barrelhouse cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Barrelhouse</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Barrelhouse</div>
+        </div>
+      </div>
+
+      <!-- 5. "Cryptic Crossword XXXIII" — Bombay Gin -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a6a5a, #1a8a7d);">
+          <img src="../site-educenter/static/uploads/wp/Bombay-Gin-cover-682x1024.jpg" alt="Bombay Gin cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Cryptic Crossword XXXIII"</div>
+          <div class="poem-card-journal">Bombay Gin</div>
+        </div>
+      </div>
+
+      <!-- 6. "Field Trip" — Borderlands -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #4a2a1a, #8a5a3a);">
+          <img src="../site-educenter/static/uploads/wp/Borderlands-cover.png" alt="Borderlands cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Field Trip"</div>
+          <div class="poem-card-journal">Borderlands</div>
+        </div>
+      </div>
+
+      <!-- 7. 5 poems (set 1) — Literary Shanghai -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #c73a28, #e84530);">
+          <img src="../site-educenter/static/uploads/wp/cropped-Logo-01-white.jpg" alt="Literary Shanghai cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">5 poems in Literary Shanghai (set 1)</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Literary Shanghai</div>
+        </div>
+      </div>
+
+      <!-- 8. 5 poems (set 2) — Literary Shanghai -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #a83020, #e84530);">
+          <img src="../site-educenter/static/uploads/wp/cropped-Logo-01-white.jpg" alt="Literary Shanghai cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">5 poems in Literary Shanghai (set 2)</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Literary Shanghai</div>
+        </div>
+      </div>
+
+      <!-- 9. "Cryptic Crossword L" & "Cryptic Crossword LVI" — Nimrod -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #14706a, #1a8a7d);">
+          <img src="../site-educenter/static/uploads/wp/Nimrod-Cover-697x1024.jpg" alt="Nimrod cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Cryptic Crossword L" &amp; "Cryptic Crossword LVI"</div>
+          <div class="poem-card-journal">Nimrod</div>
+        </div>
+      </div>
+
+      <!-- 10. 3 poems — Delmarva Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #3a1a5a, #6a3a9a);">
+          <img src="../site-educenter/static/uploads/wp/Delmarva-review-cover.jpg" alt="Delmarva Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">3 poems in Delmarva Review</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Delmarva Review</div>
+        </div>
+      </div>
+
+      <!-- 11. "The Tragedy of Space Opera" — 4th River -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #e84530, #c73a28);">
+          <img src="../site-educenter/static/uploads/wp/Fourth-River-682x1024.jpg" alt="4th River cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"The Tragedy of Space Opera"</div>
+          <div class="poem-card-journal">4th River</div>
+        </div>
+      </div>
+
+      <!-- 12. "The First Hundred Days" — Freezeray -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a4a6a, #1a8a7d);">
+          <img src="../site-educenter/static/uploads/wp/FrancisHouse.png" alt="Freezeray cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"The First Hundred Days"</div>
+          <div class="poem-card-journal">Freezeray</div>
+          <div class="poem-card-tbd">(note: currently shows wrong cover)</div>
+        </div>
+      </div>
+
+      <!-- 13. "Boys on the Beach" — Hawai'i Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a8a7d, #2ab5a5);">
+          <img src="../site-educenter/static/uploads/wp/hawaii-review-cover-001.jpg" alt="Hawai'i Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Boys on the Beach"</div>
+          <div class="poem-card-journal">Hawai'i Review</div>
+        </div>
+      </div>
+
+      <!-- 14. "In Which We Depart" — Hue and Cry -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #8a1a2a, #c73a28);">
+          <img src="../site-educenter/static/uploads/wp/huecry.jpg" alt="Hue and Cry cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"In Which We Depart"</div>
+          <div class="poem-card-journal">Hue and Cry</div>
+        </div>
+      </div>
+
+      <!-- 15. 2 poems — JAAM 30 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #2a4a2a, #4a7a4a);">
+          <img src="../site-educenter/static/uploads/wp/jaam-cover-001.jpg" alt="JAAM 30 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in JAAM 30</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">JAAM</div>
+        </div>
+      </div>
+
+      <!-- 16. 2 poems — Lunch Ticket -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #5a3a1a, #9a6a3a);">
+          <img src="../site-educenter/static/uploads/wp/Lunch-Ticket-800x1024.png" alt="Lunch Ticket cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Lunch Ticket</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Lunch Ticket</div>
+        </div>
+      </div>
+
+      <!-- 17. Imaginary Syllabi -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a1a4a, #3a3a8a);">
+          <img src="../site-educenter/static/uploads/wp/imaginary-syllabi-cover.jpg" alt="Imaginary Syllabi cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">Imaginary Syllabi</div>
+          <div class="poem-card-journal">Imaginary Syllabi</div>
+        </div>
+      </div>
+
+      <!-- 18. "Shipwrecked I Arrived" — NZ Listener -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #e84530, #a83020);">
+          <img src="../site-educenter/static/uploads/wp/nz-listener-cover.jpg" alt="NZ Listener cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Shipwrecked I Arrived"</div>
+          <div class="poem-card-journal">NZ Listener</div>
+        </div>
+      </div>
+
+      <!-- 19. "Mount Ebenezer Roadhouse" — NZ Poetry Shelf -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #14706a, #1a8a7d);">
+          <img src="../site-educenter/static/uploads/wp/NZ-Poetry-Shelf1.png" alt="NZ Poetry Shelf cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Mount Ebenezer Roadhouse"</div>
+          <div class="poem-card-journal">NZ Poetry Shelf</div>
+        </div>
+      </div>
+
+      <!-- 20. 2 poems — Landfall 218 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a8a7d, #14706a);">
+          <img src="../site-educenter/static/uploads/wp/landfall-218-cover.jpg" alt="Landfall 218 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Landfall 218</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Landfall</div>
+        </div>
+      </div>
+
+      <!-- 21. "Picton's Morning Crust" — Landfall 223 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a5a4a, #1a8a7d);">
+          <img src="../site-educenter/static/uploads/wp/landfall-223-cover.jpg" alt="Landfall 223 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Picton's Morning Crust"</div>
+          <div class="poem-card-journal">Landfall</div>
+        </div>
+      </div>
+
+      <!-- 22. 2 poems — Riprap 36 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #4a2a4a, #7a4a7a);">
+          <img src="../site-educenter/static/uploads/wp/Riprap-cover-682x1024.jpg" alt="Riprap cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Riprap 36</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Riprap</div>
+        </div>
+      </div>
+
+      <!-- 23. 2 poems — Roads Taken -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #c73a28, #e84530);">
+          <img src="../site-educenter/static/uploads/wp/Roads-Takenn-cover-681x1024.jpeg" alt="Roads Taken cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Roads Taken</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Roads Taken</div>
+        </div>
+      </div>
+
+      <!-- 24. "Sonoran Song" — Cream City Review -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #8a6a1a, #d4a843);">
+          <img src="../site-educenter/static/uploads/wp/cream-city-review-cover.jpg" alt="Cream City Review cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Sonoran Song"</div>
+          <div class="poem-card-journal">Cream City Review</div>
+        </div>
+      </div>
+
+      <!-- 25. 3 poems — Spectrum -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a3a6a, #3a6a9a);">
+          <img src="../site-educenter/static/uploads/wp/Spectrum-Vol_-63-Covers-v_-2-667x1024.png" alt="Spectrum cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">3 poems in Spectrum</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Spectrum</div>
+        </div>
+      </div>
+
+      <!-- 26. 2 poems — Sport 43 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #e84530, #c73a28);">
+          <img src="../site-educenter/static/uploads/wp/sportcover.png" alt="Sport 43 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Sport 43</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Sport</div>
+        </div>
+      </div>
+
+      <!-- 27. "Tell Me a Story" — Storm Cellar -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #2a2a3a, #4a4a6a);">
+          <img src="../site-educenter/static/uploads/wp/Storm_Cellar_cover_3.2-682x1024.jpg" alt="Storm Cellar cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">"Tell Me a Story"</div>
+          <div class="poem-card-journal">Storm Cellar</div>
+        </div>
+      </div>
+
+      <!-- 28. Both poems — Turbine -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #1a8a7d, #14706a);">
+          <img src="../site-educenter/static/uploads/wp/turbine-cover-1.png" alt="Turbine cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Turbine</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Turbine</div>
+        </div>
+      </div>
+
+      <!-- 29. 2 poems — Sport 40 -->
+      <div class="poem-card">
+        <div class="poem-card-cover" style="background: linear-gradient(135deg, #a83020, #e84530);">
+          <img src="../site-educenter/static/uploads/wp/sport-cover1.jpg" alt="Sport 40 cover" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="poem-card-info">
+          <div class="poem-card-title">2 poems in Sport 40</div>
+          <div class="poem-card-tbd">(titles TBD)</div>
+          <div class="poem-card-journal">Sport</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Explore More</h2>
+    </div>
+    <div class="cta-buttons">
+      <a href="option-b-poetry-all.html" class="btn-fill">View All Poetry &rarr;</a>
+      <a href="option-b-writing.html" class="btn-ghost">Misc Writing &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="option-b-crossword-grid.html">Home</a>
+      <a href="option-b-crossword-grid.html#books">Books</a>
+      <a href="#">Poetry</a>
+      <a href="option-b-crossword-grid.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &nearr;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &nearr;</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &nearr;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>
