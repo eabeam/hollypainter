@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://hollypainter.com/"
+baseURL = "https://hollypainter.netlify.app/"
 title = "Holly Painter"
 # This site now renders from the checked-in layouts/static files in this
 # directory. Do not rely on a separate `themes/educenter` checkout.
