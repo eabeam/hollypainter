@@ -1,0 +1,6 @@
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
+
+# Hugo build lock files
+**/.hugo_build.lock
