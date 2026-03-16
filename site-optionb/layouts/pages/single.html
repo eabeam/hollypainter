@@ -1,0 +1,73 @@
+{{ define "main" }}
+{{ partial "page-header.html" . }}
+
+<section>
+  <div class="section-inner">
+
+    {{/* ── ABOUT PAGE ── */}}
+    {{ if .Params.cv_file }}
+    <div class="description-block">
+      {{ .Content }}
+    </div>
+
+    <a href="{{ .Params.cv_file | safeURL }}" class="prominent-link cv-download" target="_blank" rel="noopener">
+      <div class="link-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+      </div>
+      <div>
+        <div class="link-label">Download</div>
+        <div class="link-text">{{ .Params.cv_label | default "Curriculum Vitae (PDF)" }}</div>
+      </div>
+      <span class="arrow">&darr;</span>
+    </a>
+
+    {{/* ── CONTACT PAGE ── */}}
+    {{ else if .Params.form }}
+    <div class="description-block">
+      {{ .Content }}
+    </div>
+
+    {{ with .Params.email }}
+    <div class="contact-email">
+      <h3>Email</h3>
+      <p><a href="mailto:{{ . }}">{{ . }}</a></p>
+    </div>
+    {{ end }}
+
+    <div class="contact-form-wrapper">
+      <form name="contact" method="POST" data-netlify="true" netlify netlify-honeypot="bot-field" class="contact-form">
+        <input type="hidden" name="form-name" value="contact">
+        <p class="honeypot" style="display:none;">
+          <label>Don't fill this out if you're human: <input name="bot-field"></label>
+        </p>
+        <div class="form-group">
+          <label for="contact-name">Name</label>
+          <input id="contact-name" type="text" name="name" required placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email</label>
+          <input id="contact-email" type="email" name="email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" rows="6" required placeholder="Your message..."></textarea>
+        </div>
+        <button type="submit" class="btn-fill btn-submit">Send Message</button>
+      </form>
+    </div>
+
+    {{/* ── GENERIC PAGE ── */}}
+    {{ else }}
+    <div class="description-block">
+      {{ .Content }}
+    </div>
+    {{ end }}
+
+  </div>
+</section>
+{{ end }}

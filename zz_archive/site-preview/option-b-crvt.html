@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Center for Research on Vermont</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-top: 64px;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-breadcrumb {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .page-breadcrumb a {
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .page-breadcrumb a:hover { color: var(--white); }
+  .page-breadcrumb .sep { color: var(--vermillion); margin: 0 0.5rem; }
+  .page-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+  .page-role-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--vermillion);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* ── BENTO CARDS ── */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 3rem;
+  }
+  .bento-card {
+    background: var(--black);
+    padding: 2.5rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .bento-card:hover { background: var(--off-black); }
+  .bento-card.full-width { grid-column: span 2; }
+  .bento-card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .bento-card h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .bento-card p {
+    font-size: 0.95rem;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* ── DESCRIPTION BLOCK ── */
+  .description-block {
+    max-width: 800px;
+    margin-bottom: 3rem;
+  }
+  .description-block p {
+    font-size: 1.1rem;
+    color: rgba(248,248,246,0.85);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .placeholder-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--teal);
+    background: rgba(26,138,125,0.08);
+    border: 1px solid rgba(26,138,125,0.2);
+    padding: 1.25rem 1.5rem;
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+
+  /* ── EVENTS AREA ── */
+  .events-area {
+    background: var(--off-black);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 3rem;
+    position: relative;
+  }
+  .events-area-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .events-area p {
+    font-size: 0.95rem;
+    color: var(--mid);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .events-placeholder {
+    border: 2px dashed rgba(255,255,255,0.1);
+    padding: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .events-placeholder-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.4;
+  }
+  .events-placeholder-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+  .btn-teal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--teal);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-teal:hover { background: #157a6e; transform: translateY(-2px); }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  /* ── PROMINENT LINK ── */
+  .prominent-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--off-black);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.3s;
+    margin-top: 2rem;
+  }
+  .prominent-link:hover {
+    background: var(--charcoal);
+    border-color: var(--vermillion);
+  }
+  .prominent-link .link-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .prominent-link .link-text {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .prominent-link .link-url {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    margin-top: 0.25rem;
+  }
+  .prominent-link .arrow {
+    margin-left: auto;
+    font-size: 1.4rem;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .prominent-link:hover .arrow {
+    color: var(--vermillion);
+    transform: translate(4px, -4px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card.full-width { grid-column: span 1; }
+    .page-title { font-size: 2.5rem; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 3rem 1.25rem; }
+    .page-header { padding: 4rem 1.25rem 2rem; }
+    .page-title { font-size: 2rem; }
+    .section-title { font-size: 1.8rem; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="index.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="index.html#roles" class="active">Academic</a>
+      <a href="index.html#events">Events</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb anim-up">
+      <a href="index.html">Home</a>
+      <span class="sep">//</span>
+      <a href="index.html#roles">Academic</a>
+      <span class="sep">//</span>
+      CRVT
+    </div>
+    <div class="page-role-tag anim-up d1">Director</div>
+    <h1 class="page-title anim-up d1">Center for Research<br>on Vermont</h1>
+  </div>
+</div>
+
+<!-- ABOUT CRVT -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">About the Center</h2>
+    </div>
+    <div class="description-block anim-up d2">
+      <p>UVM's hub for Vermont-focused scholarship, connecting faculty, students, and communities across the state.</p>
+      <div class="placeholder-note">
+        [CRVT description needed from Holly -- overall description of the Center]
+      </div>
+    </div>
+
+    <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank" class="prominent-link anim-up d3">
+      <div>
+        <div class="link-label">Official Site</div>
+        <div class="link-text">Center for Research on Vermont at UVM</div>
+        <div class="link-url">uvm.edu/cas/vermontresearch</div>
+      </div>
+      <span class="arrow">&#8599;</span>
+    </a>
+  </div>
+</section>
+
+<!-- PROUD LITTLE STATE -->
+<section style="background: var(--off-black); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Proud Little State</h2>
+    </div>
+    <div class="bento-grid" style="background: transparent; border: none; margin-bottom: 0;">
+      <div class="bento-card full-width" style="background: var(--black);">
+        <div class="bento-card-tag">Program</div>
+        <h3>Proud Little State</h3>
+        <div class="placeholder-note" style="margin-top: 1rem;">
+          [Proud Little State description needed from Holly]
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING EVENTS -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Upcoming Events</h2>
+    </div>
+
+    <div class="events-area">
+      <div class="events-area-label">CRVT Events Calendar</div>
+      <div class="events-placeholder">
+        <div class="events-placeholder-icon">&#128197;</div>
+        <div class="events-placeholder-text">Events are pulled from the UVM events calendar</div>
+      </div>
+      <p>CRVT events, lectures, and programs are listed on the official UVM events calendar. Visit the link below to see all upcoming events for the Center for Research on Vermont.</p>
+      <a href="https://events.uvm.edu/department/center_for_research_on_vermont" target="_blank" class="btn-fill">View CRVT Events on UVM Calendar &#8599;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="index.html#books">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="index.html#events">Events</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &#8599;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &#8599;</a>
+      <a href="option-b-teaching.html">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &#8599;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>

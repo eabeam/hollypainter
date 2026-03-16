@@ -1,0 +1,27 @@
+{{ define "main" }}
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb anim-up">
+      <a href="/">Home</a>
+      <span class="sep">//</span>
+      Teaching
+    </div>
+    <h1 class="page-title anim-up d1">Teaching</h1>
+    {{ with .Params.intro }}
+    <p class="page-intro anim-up d2">{{ . }}</p>
+    {{ end }}
+  </div>
+</div>
+
+<!-- CONTENT (styled markdown) -->
+<section>
+  <div class="section-inner">
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
+
+{{ end }}

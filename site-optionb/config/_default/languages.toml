@@ -1,0 +1,10 @@
+################################### English language #####################################
+[en]
+languageName = "English"
+languageCode = "en-us"
+contentDir = "content"
+weight = 1
+
+[en.params]
+home = "Home"
+copyright = "Copyright Holly Painter"

@@ -1,0 +1,65 @@
+{{ define "main" }}
+{{/* ── POETRY SINGLE PAGE ── */}}
+
+{{/* Page header with breadcrumb: Home // Poetry // Title */}}
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">//</span>
+      {{ $poetrySection := site.GetPage "section" "poetry" }}
+      {{ if $poetrySection }}
+        <a href="{{ $poetrySection.Permalink }}">Poetry</a>
+        <span class="sep">//</span>
+      {{ end }}
+      {{ .Params.work_title | default .Title }}
+    </div>
+    <h1 class="page-title">{{ .Params.work_title | default .Title }}</h1>
+    {{ with .Params.publisher }}
+      <p class="page-subtitle">{{ . }}</p>
+    {{ end }}
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="poem-single-layout">
+      {{/* Cover image */}}
+      {{ with .Params.image }}
+        <div class="poem-single-cover">
+          <img src="{{ . }}" alt="{{ $.Params.work_title | default $.Title }}" loading="lazy" decoding="async">
+        </div>
+      {{ end }}
+
+      <div class="poem-single-content">
+        {{/* Publisher */}}
+        {{ with .Params.publisher }}
+          <div class="poem-single-publisher">Published in {{ . }}</div>
+        {{ end }}
+
+        {{/* Excerpt */}}
+        {{ with .Params.excerpt }}
+          <div class="poem-single-excerpt">
+            <p>{{ . }}</p>
+          </div>
+        {{ end }}
+
+        {{/* External link button */}}
+        {{ $link := .Params.url | default .Params.pdf }}
+        {{ with $link }}
+          <div class="poem-single-actions">
+            <a href="{{ . }}" class="btn-fill" target="_blank" rel="noopener">Read at Publisher &rarr;</a>
+          </div>
+        {{ end }}
+
+        {{/* Body content */}}
+        {{ with .Content }}
+          <div class="content" style="margin-top: 2rem;">
+            {{ . }}
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,139 @@
+{{ define "main" }}
+{{/* ── POETRY LANDING PAGE ── */}}
+
+{{/* Page hero (from mockup option-b-poetry.html) */}}
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-hero-number anim-up">01 — POETRY</span>
+    <h1 class="page-hero-title anim-up d1">Featured <span class="outline">Poetry</span></h1>
+    {{ with .Params.intro }}
+      <p class="page-hero-subtitle anim-up d2">{{ . }}</p>
+    {{ else }}
+      <p class="page-hero-subtitle anim-up d2">Selected publications from journals worldwide</p>
+    {{ end }}
+  </div>
+</div>
+
+{{/* Intro content from _index.md body, if any */}}
+{{ with .Content }}
+<section>
+  <div class="section-inner">
+    <div class="description-block">
+      {{ . }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* Build sorted poetry pages list (excluding bibliography section) */}}
+{{ $poetryPages := .RegularPages }}
+
+{{/* Sort by weight if available, then append unweighted */}}
+{{ $weightedPoems := where $poetryPages "Params.weight" "ne" nil }}
+{{ if gt (len $weightedPoems) 0 }}
+  {{ $weightedPoems = sort $weightedPoems "Params.weight" "asc" }}
+  {{ $unweightedPoems := where $poetryPages "Params.weight" "eq" nil }}
+  {{ $poetryPages = $weightedPoems | append $unweightedPoems }}
+{{ end }}
+
+{{/* Featured poems: those flagged featured, or first 6 if none flagged */}}
+{{ $featured := where $poetryPages "Params.featured" true }}
+{{ if eq (len $featured) 0 }}
+  {{ $featured = first 6 $poetryPages }}
+{{ end }}
+
+{{/* Non-featured poems: all others */}}
+{{ $featuredSet := slice }}
+{{ range $featured }}
+  {{ $featuredSet = $featuredSet | append .File.UniqueID }}
+{{ end }}
+
+{{/* ── FEATURED POEMS SECTION ── */}}
+{{ if gt (len $featured) 0 }}
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Featured</h2>
+    </div>
+
+    <div class="poems-grid">
+      {{ range $featured }}
+        {{ $poetryLink := .Params.url | default .Params.pdf }}
+        {{ $displayTitle := .Params.work_title | default .Title }}
+        <a class="poem-card" href="{{ with $poetryLink }}{{ . }}{{ else }}{{ .Permalink }}{{ end }}"{{ with $poetryLink }} target="_blank" rel="noopener"{{ end }}>
+          <div class="poem-card-cover"{{ if .Params.image }} style="background: var(--charcoal);"{{ else }} style="background: linear-gradient(135deg, var(--vermillion), var(--vermillion-dark));"{{ end }}>
+            {{ if .Params.image }}
+              <img src="{{ .Params.image }}" alt="{{ $displayTitle }}" style="width:100%;height:100%;object-fit:cover;">
+            {{ else }}
+              <span class="journal-name">{{ .Params.publisher }}</span>
+            {{ end }}
+          </div>
+          <div class="poem-card-info">
+            <div class="poem-card-title">{{ $displayTitle }}</div>
+            {{ with .Params.publisher }}
+              <div class="poem-card-journal">{{ . }}</div>
+            {{ end }}
+          </div>
+        </a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* ── ALL POEMS SECTION ── */}}
+{{ $remaining := where $poetryPages "Params.featured" "ne" true }}
+{{/* If no poems are flagged featured, remaining = all minus the first 6 */}}
+{{ $hasFeaturedFlag := where $poetryPages "Params.featured" true }}
+{{ if eq (len $hasFeaturedFlag) 0 }}
+  {{ $remaining = after 6 $poetryPages }}
+{{ end }}
+
+{{ if gt (len $remaining) 0 }}
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">{{ if gt (len $featured) 0 }}03{{ else }}02{{ end }}</span>
+      <h2 class="section-title">All Publications</h2>
+    </div>
+
+    <div class="poems-grid">
+      {{ range $remaining }}
+        {{ $poetryLink := .Params.url | default .Params.pdf }}
+        {{ $displayTitle := .Params.work_title | default .Title }}
+        <a class="poem-card" href="{{ with $poetryLink }}{{ . }}{{ else }}{{ .Permalink }}{{ end }}"{{ with $poetryLink }} target="_blank" rel="noopener"{{ end }}>
+          <div class="poem-card-cover"{{ if .Params.image }} style="background: var(--charcoal);"{{ else }} style="background: linear-gradient(135deg, var(--teal), var(--teal-dark));"{{ end }}>
+            {{ if .Params.image }}
+              <img src="{{ .Params.image }}" alt="{{ $displayTitle }}" style="width:100%;height:100%;object-fit:cover;">
+            {{ else }}
+              <span class="journal-name">{{ .Params.publisher }}</span>
+            {{ end }}
+          </div>
+          <div class="poem-card-info">
+            <div class="poem-card-title">{{ $displayTitle }}</div>
+            {{ with .Params.publisher }}
+              <div class="poem-card-journal">{{ . }}</div>
+            {{ end }}
+          </div>
+        </a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* ── CTA SECTION ── */}}
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">{{ if gt (len $remaining) 0 }}04{{ else }}03{{ end }}</span>
+      <h2 class="section-title">Explore More</h2>
+    </div>
+    <div class="cta-buttons">
+      <a href="{{ "poetry/bibliography/" | relURL }}" class="btn-fill">Full Bibliography &rarr;</a>
+      <a href="{{ "writing/" | relURL }}" class="btn-ghost">Misc Writing &rarr;</a>
+    </div>
+  </div>
+</section>
+{{ end }}

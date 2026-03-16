@@ -1,0 +1,119 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">{{ .Title }}</h2>
+        {{ with .Params.intro }}
+        <p class="lead text-dark">{{ . }}</p>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Content }}
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <div class="content">{{ . }}</div>
+      </div>
+    </div>
+    {{ end }}
+    {{ $events := where site.RegularPages "Section" "events" }}
+    {{ $upcoming := sort (where $events "Date" "ge" now) "Date" "asc" }}
+    {{ $past := sort (where $events "Date" "lt" now) "Date" "desc" }}
+
+    <div class="row">
+      <div class="col-12">
+        <h3 class="mb-3">Upcoming Events</h3>
+      </div>
+    </div>
+    {{ if gt (len $upcoming) 0 }}
+    <div class="row">
+      {{ range $upcoming }}
+      {{ $eventLink := .Params.url }}
+      <div class="col-lg-6 mb-4">
+        <div class="card border-0 rounded-0 hover-shadow h-100">
+          <div class="card-body">
+            <p class="mb-2 text-muted">
+              <i class="ti-calendar mr-2"></i>{{ .Date.Format "Jan 2, 2006" }}
+            </p>
+            {{ with .Params.location }}
+            <p class="mb-2 text-muted"><i class="ti-location-pin mr-2"></i>{{ . }}</p>
+            {{ end }}
+            <h4 class="card-title">
+              {{ if $eventLink }}
+              <a href="{{ $eventLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+              {{ else }}
+              {{ .Title }}
+              {{ end }}
+            </h4>
+            {{ with .Params.type }}
+            <p class="text-muted mb-2">{{ . | title }}</p>
+            {{ end }}
+            {{ with .Content }}
+            <div class="event-note">{{ . }}</div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+    {{ else }}
+    <div class="row">
+      <div class="col-12">
+        <p class="text-muted">Check back for more events soon.</p>
+      </div>
+    </div>
+    {{ end }}
+
+    <div class="row mt-5">
+      <div class="col-12">
+        <h3 class="mb-3">Past Events</h3>
+      </div>
+    </div>
+    {{ if gt (len $past) 0 }}
+      {{ range $past.GroupByDate "2006" }}
+      <div class="row mt-4">
+        <div class="col-12">
+          <h4 class="mb-3">{{ .Key }}</h4>
+        </div>
+      </div>
+      <div class="row">
+        {{ range sort .Pages "Date" "desc" }}
+        {{ $eventLink := .Params.url }}
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 bg-gray h-100">
+            <div class="card-body">
+              <p class="mb-2 text-muted">
+                <i class="ti-calendar mr-2"></i>{{ .Date.Format "Jan 2, 2006" }}
+              </p>
+              {{ with .Params.location }}
+              <p class="mb-2 text-muted"><i class="ti-location-pin mr-2"></i>{{ . }}</p>
+              {{ end }}
+              <h5 class="mb-1">
+                {{ if $eventLink }}
+                <a href="{{ $eventLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+                {{ else }}
+                {{ .Title }}
+                {{ end }}
+              </h5>
+              {{ with .Params.type }}
+              <p class="text-muted mb-2">{{ . | title }}</p>
+              {{ end }}
+              {{ with .Content }}
+              <div class="event-note">{{ . }}</div>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+      {{ end }}
+    {{ else }}
+      <div class="row">
+        <div class="col-12">
+          <p class="text-muted">No past events listed yet.</p>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

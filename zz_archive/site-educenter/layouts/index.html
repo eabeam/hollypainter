@@ -1,0 +1,149 @@
+{{ define "main" }}
+{{ $hero := .Params.hero }}
+<section class="hero hero--split">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-copy text-white">
+        <p class="kicker text-lighten mb-2">Poet</p>
+        <h1 class="text-white">{{ $hero.name }}</h1>
+        <p class="subtitle text-lighten mb-4">{{ $hero.tagline | default "Poet and educator" }}</p>
+        <div class="cta-row">
+          <a href="{{ $hero.cta_link }}" class="btn btn-primary">{{ $hero.cta_label }}</a>
+          <a href="{{ "about/" | relLangURL }}" class="cta-link text-lighten">Read Full Bio</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="{{ $hero.image | absURL }}" alt="{{ $hero.name }}">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm bg-gray">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        {{ with .Params.bio_title }}
+        <h2 class="section-title">{{ . }}</h2>
+        {{ end }}
+        <div class="lead text-dark bio-text">{{ .Params.bio_text | markdownify }}</div>
+      </div>
+      <div class="col-lg-4 text-lg-right">
+        <a href="{{ "about/" | relLangURL }}" class="btn btn-primary">Read Full Bio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ $poetryPages := where .Site.RegularPages "Section" "poetry" }}
+{{ $weightedPoems := where $poetryPages "Params.weight" "ne" nil }}
+{{ if gt (len $weightedPoems) 0 }}
+  {{ $weightedPoems = sort $weightedPoems "Params.weight" "asc" }}
+  {{ $unweightedPoems := where $poetryPages "Params.weight" "eq" nil }}
+  {{ $poetryPages = $weightedPoems | append $unweightedPoems }}
+{{ end }}
+{{ $featured := where $poetryPages "Params.featured" true }}
+{{ if eq (len $featured) 0 }}
+  {{ $featured = first 6 $poetryPages }}
+{{ end }}
+<section class="section">
+  <div class="container">
+    <div class="row align-items-center mb-4">
+      <div class="col-md-8">
+        <h2 class="section-title">{{ .Params.featured_poetry_title }}</h2>
+      </div>
+      <div class="col-md-4 text-md-right">
+        <a href="{{ "poetry/" | relLangURL }}" class="btn btn-sm btn-outline-primary">View all poetry</a>
+      </div>
+    </div>
+    <div class="row">
+      {{ range first 6 $featured }}
+      {{ $poem := . }}
+      {{ $poetryLink := .Params.pdf | default .Params.url }}
+      <div class="col-lg-4 col-sm-6 mb-4">
+        <div class="card border-0 rounded-0 hover-shadow h-100">
+          {{ with .Params.image }}
+          {{ partial "image.html" (dict "Src" . "Alt" $poem.Title "Class" "card-img-top rounded-0") }}
+          {{ end }}
+          <div class="card-body">
+            <h4 class="card-title">
+              {{ if $poetryLink }}
+              <a href="{{ $poetryLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+              {{ else }}
+              {{ .Title }}
+              {{ end }}
+            </h4>
+            {{ with .Params.publisher }}
+            <p class="small text-muted mb-2">in {{ . }}</p>
+            {{ end }}
+            {{ with .Params.excerpt }}
+            <p class="small text-muted">{{ . }}</p>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+{{ $booksSection := site.GetPage "section" "books" }}
+{{ $books := slice }}
+{{ with $booksSection }}
+  {{ $books = .Sections }}
+{{ end }}
+{{ $books = where $books "Params.home_exclude" "ne" true }}
+{{ $weightedBooks := where $books "Params.weight" "ne" nil }}
+{{ if gt (len $weightedBooks) 0 }}
+  {{ $weightedBooks = sort $weightedBooks "Params.weight" "asc" }}
+  {{ $unweightedBooks := where $books "Params.weight" "eq" nil }}
+  {{ $unweightedBooks = sort $unweightedBooks "Title" "asc" }}
+  {{ $books = $weightedBooks | append $unweightedBooks }}
+{{ else }}
+  {{ $books = sort $books "Title" "asc" }}
+{{ end }}
+{{ $books = first 4 $books }}
+<section class="section-sm bg-gray">
+  <div class="container">
+    <div class="row align-items-center mb-4">
+      <div class="col-md-8">
+        <h2 class="section-title">{{ .Params.books_title }}</h2>
+      </div>
+      <div class="col-md-4 text-md-right">
+        <a href="{{ "books/" | relLangURL }}" class="btn btn-sm btn-outline-primary">View all books</a>
+      </div>
+    </div>
+    <div class="row">
+      {{ range $books }}
+      <div class="col-lg-3 col-md-4 col-6 mb-4">
+        <a class="text-decoration-none" href="{{ .RelPermalink }}">
+          <div class="card border-0 rounded-0 hover-shadow h-100">
+            {{ partial "image.html" (dict "Src" .Params.cover "Alt" .Title "Class" "card-img-top rounded-0") }}
+            <div class="card-body">
+              <h6 class="mb-1">{{ .Title }}</h6>
+              {{ with .Params.pub_date }}
+              <p class="text-muted small mb-0">{{ (time .).Format "2006" }}</p>
+              {{ end }}
+            </div>
+          </div>
+        </a>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h2 class="section-title">{{ .Params.contact_title }}</h2>
+        <p class="lead text-dark">{{ .Params.contact_cta }}</p>
+      </div>
+      <div class="col-lg-4 text-lg-right">
+        <a href="{{ .Params.contact_link }}" class="btn btn-outline-primary">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,33 @@
+######################## default configuration ####################
+baseURL = "https://hollypainter.netlify.app/"
+title = "Holly Painter"
+timeZone = "America/New_York"
+
+# post pagination
+pagination.pagerSize = 6
+
+# post excerpt
+summaryLength = 10
+
+# google analytics
+googleAnalytics = ""
+
+# disable language
+disableLanguages = []
+
+hasCJKLanguage = false
+
+enableRobotsTXT = true
+
+############################# Outputs ##############################
+[outputs]
+home = ["HTML", "RSS"]
+
+[sitemap]
+changeFreq = "monthly"
+priority = 0.5
+
+############################# Markup ###############################
+[markup]
+[markup.goldmark.renderer]
+unsafe = true

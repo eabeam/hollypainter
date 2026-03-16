@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holly Painter — Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #1a1a1a;
+    --charcoal: #2c2c2c;
+    --white: #f8f8f6;
+    --off-white: #eeece8;
+    --vermillion: #e84530;
+    --vermillion-dark: #c73a28;
+    --teal: #1a8a7d;
+    --mid: #888;
+    --light: #bbb;
+    --grid-line: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--vermillion); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--light);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .nav-links a.active {
+    color: var(--vermillion);
+    border-color: var(--vermillion);
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-top: 64px;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+  .page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .page-title {
+    font-size: 5.5rem;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+  }
+  .page-title .filled { color: var(--white); }
+  .page-title .outlined {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--vermillion);
+  }
+  .page-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── BOOK SECTION ── */
+  .book-section {
+    padding: 5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .book-section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .book-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .book-layout.reversed {
+    grid-template-columns: 1fr 380px;
+  }
+  .book-layout.reversed .book-cover-col { order: 2; }
+  .book-layout.reversed .book-info-col { order: 1; }
+
+  .book-cover-col {
+    position: sticky;
+    top: 100px;
+  }
+  .book-cover-placeholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-cover-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .book-cover-placeholder span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .book-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  .book-publisher {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+    margin-bottom: 2rem;
+  }
+  .book-description {
+    font-size: 1rem;
+    color: rgba(248,248,246,0.8);
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+  .book-description p {
+    margin-bottom: 1rem;
+  }
+  .book-description p:last-child {
+    margin-bottom: 0;
+  }
+
+  .book-buy-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn-fill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--vermillion);
+    color: var(--white);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  /* ── PRAISE / REVIEWS ── */
+  .praise-section {
+    margin-top: 3rem;
+  }
+  .praise-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .praise-quote {
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--vermillion);
+  }
+  .praise-quote blockquote {
+    font-size: 0.95rem;
+    color: rgba(248,248,246,0.75);
+    line-height: 1.85;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+  }
+  .praise-quote .attribution {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.03em;
+  }
+  .praise-quote .attribution a {
+    color: var(--vermillion);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .praise-quote .attribution a:hover {
+    color: var(--white);
+  }
+
+  /* ── SAMPLE POEMS ── */
+  .samples-section {
+    margin-top: 3rem;
+  }
+  .samples-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .samples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .sample-card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--off-black);
+    border: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sample-card:hover {
+    background: var(--charcoal);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+  }
+  .sample-card-journal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--vermillion);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .sample-card-title {
+    font-size: 0.85rem;
+    color: var(--white);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .sample-card-arrow {
+    font-size: 0.75rem;
+    color: var(--mid);
+    margin-top: 0.75rem;
+    transition: color 0.2s;
+  }
+  .sample-card:hover .sample-card-arrow {
+    color: var(--vermillion);
+  }
+
+  /* ── DIVIDER ── */
+  .book-divider {
+    max-width: 1400px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--vermillion); }
+  .footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 300px; }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-up {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .book-layout,
+    .book-layout.reversed {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .book-layout.reversed .book-cover-col { order: 0; }
+    .book-layout.reversed .book-info-col { order: 0; }
+    .book-cover-col {
+      position: static;
+      max-width: 320px;
+    }
+    .page-title { font-size: 4rem; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .book-section { padding: 3rem 1.25rem; }
+    .page-header { padding: 4rem 1.25rem 3rem; }
+    .page-title { font-size: 3rem; }
+    .book-title { font-size: 1.8rem; }
+    .book-cover-col { max-width: 260px; }
+    .samples-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; }
+    .book-buy-links { flex-direction: column; }
+    .book-buy-links a { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">holly<span>.</span>painter</a>
+    <div class="nav-links">
+      <a href="#" class="active">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="index.html#roles">Academic</a>
+      <a href="index.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1 class="page-title anim-up">
+      <span class="filled">Bo</span><span class="outlined">oks</span>
+    </h1>
+    <p class="page-subtitle anim-up d1">Full-length collections and ongoing book-length projects</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- BOOK 01: At last, we listen closely          -->
+<!-- ════════════════════════════════════════════ -->
+<section class="book-section" id="book-01">
+  <div class="book-section-inner">
+    <div class="book-layout">
+
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder" style="background:linear-gradient(135deg,#1a1035,#3d1f6d);">
+          <img src="/uploads/wp/painter_listen_1200x-683x1024.webp" alt="At last, we listen closely" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+      </div>
+
+      <div class="book-info-col">
+        <div class="book-number">Book 01</div>
+        <h2 class="book-title">At last, we listen closely: cryptic crossword poems</h2>
+        <div class="book-publisher">Black Spring Press &middot; 2025</div>
+
+        <div class="book-description">
+          <p><em>At last, we listen closely: cryptic crossword poems</em> brings together two favorite pastimes: reading poetry and doing crossword puzzles. In this collection, Holly Painter invents an original form: solvable interconnected poems based on the wordplay-inflected cryptic crosswords found in British newspapers and around the world.</p>
+          <p>Organized into sections such as "Seas & Seasons" and "Characters & Conversations," the collection comprises 55 poem pairs. Each half of the pair - the "clues" poem and the "answers" haiku - can be enjoyed as standalone poetry, with subject matter ranging from moon-washed forests to pub brawls, rebellious churchwomen to Vermont dairy cows. In some instances, the paired poems are obvious in their shared attentions, working in concert to depict the startling of a deer or a lifetime of queer love. Other pairs invite the reader to consider more oblique or metaphorical connections between the two parts, like an all-night frat party and the way that "zigzag bees pinball between dozy pink blossoms."</p>
+          <p>Adventurous readers can also choose to join the poet in her work by obscuring the haiku and generating it themselves: each line of the "clues" poem employs the devices and tricks of cryptic crossword setters to provide one word of the "answers" haiku.</p>
+          <p><em>At last, we listen closely: cryptic crossword poems</em> is a unique and boundary-blurring reading experience for poetry lovers and puzzle solvers alike.</p>
+        </div>
+
+        <div class="book-buy-links">
+          <a href="https://blackspringpressgroup.com/products/at-last-we-listen-closely-cryptic-crossword-poems" class="btn-fill" target="_blank">Pre-order from Black Spring Press</a>
+        </div>
+
+        <!-- SAMPLE POEMS -->
+        <div class="samples-section">
+          <div class="samples-label">Sample Poems</div>
+          <div class="samples-grid">
+            <a href="/uploads/wp/Bombay-Gin-poem.pdf" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Bombay Gin</div>
+              <div class="sample-card-title">Cryptic Crossword Poem</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="https://issuu.com/nner/docs/nner_2020_draft_4" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Northern New England Review</div>
+              <div class="sample-card-title">NNER 40</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="/uploads/wp/Nimrod-Cryptic-Crossword-Poems.pdf" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Nimrod</div>
+              <div class="sample-card-title">Cryptic Crossword Poems</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="https://issuu.com/theparagonjournal/docs/vellichor" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Paragon Press</div>
+              <div class="sample-card-title">Vellichor</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="http://www.bmpvoices.com/nine-months-cryptic-crossword-lv-her-him-our-their-us-them-they-body-and-jaws-was-on-tv-on-a-saturday-morning?fbclid=IwAR1ZaEmSIjXhHkIYvtmxthsZKIL9vHOzm7mW_Snr-4m79yrHDA1xdR_28GU" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Brain Mill Press</div>
+              <div class="sample-card-title">Nine Months &amp; Jaws Was on TV</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="https://nzpoetryshelf.com/2018/10/08/poetry-shelf-monday-poem-holly-painters-cryptic-crossword-xxxxi/" class="sample-card" target="_blank">
+              <div class="sample-card-journal">NZ Poetry Shelf</div>
+              <div class="sample-card-title">Cryptic Crossword XXXXI</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="https://www.splitrockreview.org/holly-painter" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Split Rock Review</div>
+              <div class="sample-card-title">Cryptic Crossword Poems</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="http://www.literaryshanghai.com/holly-painter-five-more-poems/" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Alluvium</div>
+              <div class="sample-card-title">Five More Poems</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="book-divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!-- BOOK 02: The pressure of all that light      -->
+<!-- ════════════════════════════════════════════ -->
+<section class="book-section" id="book-02">
+  <div class="book-section-inner">
+    <div class="book-layout reversed">
+
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder" style="background:linear-gradient(135deg,#8a6a1a,#d4a843);">
+          <img src="/uploads/wp/The-pressure-of-all-that-light-cover-662x1024.jpeg" alt="The pressure of all that light" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+      </div>
+
+      <div class="book-info-col">
+        <div class="book-number">Book 02</div>
+        <h2 class="book-title">The pressure of all that light</h2>
+        <div class="book-publisher">Rebel Satori Press &middot; 2022</div>
+
+        <div class="book-description">
+          <p>Holly Painter's third collection charts a course through the tender friendships and lonely queer crushes of childhood and adolescence in Midwestern America and on to the dizzying freedoms of California and the disorientation of love and heartache in New Zealand. Energetic and intimate, these poems blend the personal and the pastoral in their exploration of how we arrive at ourselves.</p>
+        </div>
+
+        <div class="book-buy-links">
+          <a href="https://rebelsatori.com/product/the-pressure-of-all-that-light/" class="btn-fill" target="_blank">Rebel Satori Press</a>
+          <a href="https://www.amazon.com/Pressure-All-That-Light/dp/1608642100" class="btn-ghost" target="_blank">Amazon</a>
+        </div>
+
+        <!-- PRAISE -->
+        <div class="praise-section">
+          <div class="praise-label">Praise</div>
+
+          <div class="praise-quote">
+            <blockquote>"These are poems with narrative tension, imagery sensuous and sleek as peach slices in sweet clear syrup, poems that explore the apparently small shocks and nicks of childhood experience that in reality are formative, in turns eroding and galvanising; poems that move into the ruminative and receptive mode of a hard-won adulthood, too. The collection is a gorgeously crafted, painfully moving catalogue of acute perceptions and growth into, or realisation of identity in a society that is still aggressively layered with bigotry and ignorance - and yet which also offers pockets of empathy and love. I found myself rocked, racked, elated and tearful in such quick succession with this collection that it was easy at first to overlook the technical grace and robustness in the poems: but it is there, strong and supple, both helping to carry us over waves of grief, and to drive us through an at times almost ecstatic series of observations of the human carnival."</blockquote>
+            <div class="attribution">&mdash; <a href="https://emmaneale.wordpress.com/" target="_blank">Emma Neale</a>, author of <em>To the Occupant; The Pink Jumpsuit; Billy Bird</em></div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"Tackling travel, gender, young love, sex, and a rocky emergence from childhood through adolescence and into a vibrantly rendered adulthood, <em>The pressure of all that light</em> is a swaggeringly beautiful account of a person in the process of becoming. The language of this collection ranges from spare and spot on to lush and imaginative, and never fails to surprise. Painter's poems span across years, states and varying landscapes and, as readers, we willingly follow with such a deft hand to guide us. I trust few poets to delve as steadily and meticulously into the mechanics of the human heart as Holly Painter. This collection is a stunning accomplishment."</blockquote>
+            <div class="attribution">&mdash; <a href="https://www.megreynoldspoetry.com/" target="_blank">Meg Reynolds</a>, author of <em>Does the Earth; A Comic Year</em></div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"Holly Painter's poems keep adding to memory like a brush, painting over layers, such that if you scratch the surface it's striped with history. Real life is made of words, and there are no words for exactly how to say how it feels: to fall in love in a foreign place, to live between genders, to be a human all this time, except maybe all these ones together. The pressure of all this light is the pressure to see everything. Here, on this planet, there is too much to see, and it all goes so well together."</blockquote>
+            <div class="attribution">&mdash; <a href="https://www.theotherpaul.com/" target="_blank">Paul Legault</a>, author of <em>The Tower; Lunch Poems 2; Self Portrait in a Convex Mirror 2</em></div>
+          </div>
+        </div>
+
+        <!-- SAMPLE POEMS -->
+        <div class="samples-section">
+          <div class="samples-label">Sample Poems</div>
+          <div class="samples-grid">
+            <a href="/uploads/wp/we-get-on-uretiti.jpg" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Sport</div>
+              <div class="sample-card-title">We Get on Uretiti</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="/uploads/wp/botb1.jpg" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Hawai'i Review</div>
+              <div class="sample-card-title">Boys on the Beach</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="/uploads/wp/nz-listener.jpg" class="sample-card" target="_blank">
+              <div class="sample-card-journal">New Zealand Listener</div>
+              <div class="sample-card-title">Poem</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="/uploads/wp/sonoran-song.jpg" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Cream City Review</div>
+              <div class="sample-card-title">Sonoran Song</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="book-divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!-- BOOK 03: My Pet Sounds Off                   -->
+<!-- ════════════════════════════════════════════ -->
+<section class="book-section" id="book-03">
+  <div class="book-section-inner">
+    <div class="book-layout">
+
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder" style="background:linear-gradient(135deg,#1a5a6a,#3a9ab5);">
+          <img src="/uploads/wp/My-Pet-Sounds-Off-over.jpg" alt="My Pet Sounds Off" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+      </div>
+
+      <div class="book-info-col">
+        <div class="book-number">Book 03</div>
+        <h2 class="book-title">My Pet Sounds Off: Translating the Beach Boys</h2>
+        <div class="book-publisher">Finishing Line Press &middot; 2020</div>
+
+        <div class="book-description">
+          <p><em>My Pet Sounds Off</em> "translates" 35 popular Beach Boys songs from English to English, updating, editorializing, and goofing around with the poppy lyrics of the world's favorite surf band.</p>
+          <p>Put on your sunscreen. Pull out the deck chair. Prepare to revisit - with twenty-first century eyes and ears - the soundtrack to your adolescent romantic fantasies, crushing break-ups, and endless summers spent at the beach awash in ocean waves, pheromones, and tight harmonies.</p>
+        </div>
+
+        <div class="book-buy-links">
+          <a href="https://www.finishinglinepress.com/product/my-pet-sounds-off-translating-the-beach-boys-by-holly-painter/" class="btn-fill" target="_blank">Finishing Line Press</a>
+          <a href="https://www.amazon.com/My-Pet-Sounds-Off-Translating/dp/1646622057" class="btn-ghost" target="_blank">Amazon</a>
+        </div>
+
+        <!-- PRAISE -->
+        <div class="praise-section">
+          <div class="praise-label">Praise</div>
+
+          <div class="praise-quote">
+            <blockquote>"My Pet Sounds Off is a delightful re-imagining of the Beach Boys' catalog. Holly Painter draws new meaning out of Brian Wilson's classics, from the profound to the profoundly hilarious."</blockquote>
+            <div class="attribution">&mdash; <a href="https://popsonnet.tumblr.com/" target="_blank">Erik Didriksen</a>, author of <em>Pop Sonnets</em></div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"In this amusing response to the Beach Boys' oeuvre, Holly Painter addresses the toxic stupidity of the all-American boy-man - the surfer-bro with a hard-on for life but no substantial understanding of how the world works. Fortunately, the words of these naive, lustful men are paired with Holly's astute analysis of the Boys' motives and desires. Holly's playful translations offer a celebration of the Boys' original vigor, but thankfully, here, they are reinvigorated by a poet's wit and perspective."</blockquote>
+            <div class="attribution">&mdash; <a href="https://frankyfrancescannon.com/" target="_blank">Frances Cannon</a>, author of <em>Walter Benjamin Reimagined; The Highs and Lows of Shape-Shift Ma and Big Little Frank</em></div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"Ever wonder what the apparently romantic line 'Though life would still go on, believe me' actually means? Translation: 'I would not commit suicide / but I would be very tempted.' Painter's hilarious translations bridge the gulf between classic Beach Boys songs in your ear and those same classic songs on the page, presenting some of the band's most enigmatic work with zero ambiguity. Just as Brian Wilson tapped into those 'pet' sounds others couldn't hear, Painter makes audible the base logics and illogics that accompany all that auditory experiment. 'Oomm dot dit it.' Translation: 'telegram sounds.' Painter's pet tells you exactly what you need to hear."</blockquote>
+            <div class="attribution">&mdash; <a href="https://www.penelopecray.com" target="_blank">Penelope Cray</a>, author of <em>Miracles Come on Mondays</em></div>
+          </div>
+        </div>
+
+        <!-- SAMPLE POEMS -->
+        <div class="samples-section">
+          <div class="samples-label">Sample Poems</div>
+          <div class="samples-grid">
+            <a href="/uploads/wp/Barrelhouse-2.pdf" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Barrelhouse</div>
+              <div class="sample-card-title">Beach Boys Translation</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="http://www.crackthespine.com/2015/02/issue-138.html" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Crack the Spine</div>
+              <div class="sample-card-title">Issue 138</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="https://thecollapsar.org/the-collapsar-archive/2014/06/03/three-poems-by-holly-painter?rq=painter" class="sample-card" target="_blank">
+              <div class="sample-card-journal">The Collapsar</div>
+              <div class="sample-card-title">Three Poems</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+            <a href="http://themuseumofamericana.net/issues/current-issue-3/poetry/three-poems-by-holly-painter/" class="sample-card" target="_blank">
+              <div class="sample-card-journal">Museum of Americana</div>
+              <div class="sample-card-title">Three Poems</div>
+              <div class="sample-card-arrow">View &rarr;</div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="book-divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!-- BOOK 04: Excerpts from a Natural History     -->
+<!-- ════════════════════════════════════════════ -->
+<section class="book-section" id="book-04">
+  <div class="book-section-inner">
+    <div class="book-layout reversed">
+
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder" style="background:linear-gradient(135deg,#2a4a2a,#4a7a4a);">
+          <img src="/uploads/wp/front-cover.png" alt="Excerpts from a Natural History" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+      </div>
+
+      <div class="book-info-col">
+        <div class="book-number">Book 04</div>
+        <h2 class="book-title">Excerpts from a Natural History</h2>
+        <div class="book-publisher">Titus Books, NZ &middot; 2015</div>
+
+        <div class="book-description">
+          <p>When the British natural philosophers of the 17th century founded modern natural history, they proposed finding a poet to compile a poetic account of everything that existed in nature, very broadly defined. Four hundred years later, the work is ongoing, made modern and rigorous with rules and style-guides, managers and research-poets.</p>
+          <p>This collection follows a year's worth of submissions by one such researcher-poet, but the poems are only half the story. The rest lies in the revisions and comments - of both a professional and personal nature - between the poet and the editor back at corporate offices. As the relationship unravels, natural history becomes a tool of the heartbroken and obsessed.</p>
+        </div>
+
+        <div class="book-buy-links">
+          <a href="https://titus.co.nz/book/excerpts-from-a-natural-history-by-holly-painter/" class="btn-fill" target="_blank">Titus Books</a>
+          <a href="http://www.amazon.com/Excerpts-Natural.../dp/1877441503" class="btn-ghost" target="_blank">Amazon</a>
+        </div>
+
+        <!-- PRAISE -->
+        <div class="praise-section">
+          <div class="praise-label">Praise</div>
+
+          <div class="praise-quote">
+            <blockquote>"Holly Painter is a trickster poet, you never know where she's going next. Sometimes she wants to lick your ear. Over the page she might chew your leg off."</blockquote>
+            <div class="attribution">&mdash; <a href="http://vup.victoria.ac.nz/brands/John-Newton.html" target="_blank">John Newton</a>, author of <em>Family Songbook; Lives of the Poets</em></div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"There are two writers of this book: a lyricist and a scientist. One might think they would be at odds with each other, because they are. Painter's poems are punctuated by the commentary of a highly analytic logician. The unremitting voice of reason is given voice, like an alien attempting a study of human emotion in the margins. This book is actually two books. You should read it with you and yourself."</blockquote>
+            <div class="attribution">&mdash; <a href="https://www.theotherpaul.com/" target="_blank">Paul Legault</a>, author of <em>The Tower; Lunch Poems 2; Self Portrait in a Convex Mirror 2</em></div>
+          </div>
+        </div>
+
+        <!-- REVIEWS -->
+        <div class="praise-section" style="margin-top:2rem;">
+          <div class="praise-label">Reviews</div>
+
+          <div class="praise-quote">
+            <blockquote>"This book is a tonic for me as a reader and a boost in the blood for poetry. I adore it."</blockquote>
+            <div class="attribution">&mdash; <a href="http://nzpoetryshelf.com/2016/02/01/poetry-shelf-review-holly-painters-excerpts-from-a-natural-history/" target="_blank">Paula Green</a>, NZ Poetry Shelf</div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"A beguiling collection: witty, warm and smart."</blockquote>
+            <div class="attribution">&mdash; <a href="https://nzpoetryshelf.com/2015/12/12/poetry-shelf-poets-choice-sue-wootton-makes-her-picks/" target="_blank">Sue Wootton</a>, NZ Poetry Shelf</div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"Painter has in this one collection told us varied, (at times scandalous), details may exist in margins, details about poets and their editors having far too much to do with each other. Also hinting that a poet's place in the world could prove far broader than anyone may usually imagine."</blockquote>
+            <div class="attribution">&mdash; <a href="http://rochfordstreetreview.com/2016/03/07/like-perfume-in-a-room-raewyn-alexander-reviews-excerpts-from-a-natural-history-by-holly-painter/" target="_blank">Raewyn Alexander</a>, Rochford Street Review</div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"Holly Painter's poetry turns to the power and sustenance of story, or to the heart-work that we find when reading about natural history and she relishes the sensual and psychological pleasures to be found there. This is a poet who holds the balance between irony and pathos on a knife's edge."</blockquote>
+            <div class="attribution">&mdash; <a href="http://www.takahe.org.nz/t86/reviews/holly-painter-excerpts-from-a-natural-history/" target="_blank">Patricia Prime</a>, Takah&#275;</div>
+          </div>
+
+          <div class="praise-quote">
+            <blockquote>"...there is a curious and quick brain at work here, and Painter is one to watch in the future."</blockquote>
+            <div class="attribution">&mdash; <a href="http://www.landfallreview.com/i-bite-your-back-to-feel-the-spine/" target="_blank">Sarah Jane Barnett</a>, Landfall Review Online</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">holly<span>.</span>painter</div>
+      <p class="footer-desc">Poet, teacher, and researcher in Vermont. Author of four books. Director, Center for Research on Vermont. Senior Lecturer, UVM English.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="index.html">Home</a>
+      <a href="#">Books</a>
+      <a href="option-b-poetry.html">Poetry</a>
+      <a href="index.html#events">Events</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Academic</h4>
+      <a href="https://www.uvm.edu/cas/english/profile/holly-painter" target="_blank">UVM English Dept &nearr;</a>
+      <a href="https://www.uvm.edu/cas/vermontresearch" target="_blank">Research on Vermont &nearr;</a>
+      <a href="#">Teaching</a>
+      <a href="#">CV (PDF)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <a href="https://obsoleteontheroad.wordpress.com/" target="_blank">Obsolete Jobs &nearr;</a>
+      <a href="#">Bibliography</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Holly Painter</span>
+    <span>All rights reserved</span>
+  </div>
+</footer>
+
+</body>
+</html>

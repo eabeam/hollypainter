@@ -1,0 +1,29 @@
+#################### default parameters ################################
+logo = "uploads/holly-painter-wordmark.svg"
+logo_text = "holly.painter"
+
+# Meta data
+description = "Poetry-first portfolio for Holly Painter: books, publications, and readings."
+author = "Holly Painter"
+
+# contact info
+address = "Burlington, Vermont"
+mobile = ""
+email = "holly@hollypainter.com"
+
+# contact form action
+contact_form_action = ""
+
+# top header
+top_header = false
+
+############################# social site ########################
+[[social]]
+title = "facebook"
+icon = "ti-facebook"
+link = "https://www.facebook.com/hollypainterauthor/"
+
+[[social]]
+title = "linkedin"
+icon = "ti-linkedin"
+link = "https://www.linkedin.com/in/hollypainter/"

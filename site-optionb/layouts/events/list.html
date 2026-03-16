@@ -1,0 +1,104 @@
+{{ define "main" }}
+{{ partial "page-header.html" . }}
+
+<section>
+  <div class="section-inner">
+    {{ with .Content }}
+      <div class="description-block">
+        {{ . }}
+      </div>
+    {{ end }}
+    {{ with .Params.intro }}
+      <div class="description-block">
+        <p>{{ . }}</p>
+      </div>
+    {{ end }}
+
+    {{/* ── Gather all event pages in this section ── */}}
+    {{ $allEvents := where .Pages "Kind" "page" }}
+    {{ $upcoming := sort (where $allEvents "Date" "ge" now) "Date" "asc" }}
+    {{ $past := sort (where $allEvents "Date" "lt" now) "Date" "desc" }}
+
+    {{/* ── UPCOMING EVENTS ── */}}
+    {{ partial "section-header.html" (dict "number" "01" "title" "Upcoming") }}
+
+    {{ if gt (len $upcoming) 0 }}
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Type</th>
+          <th class="location-col">Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $upcoming }}
+        {{ $eventLink := .Params.url }}
+        <tr{{ if $eventLink }} onclick="window.open('{{ $eventLink }}', '_blank')"{{ end }}>
+          <td class="date-col">{{ .Date.Format "Jan 2, 2006" }}</td>
+          <td>
+            {{ if $eventLink }}
+              <a href="{{ $eventLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+            {{ else }}
+              {{ .Title }}
+            {{ end }}
+          </td>
+          <td class="type-col">
+            <span class="event-type event-type-{{ .Params.type | default "other" }}">{{ .Params.type | default "event" }}</span>
+          </td>
+          <td class="location-col">{{ .Params.location }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+    {{ else }}
+    <p class="events-empty">Check back for more events soon.</p>
+    {{ end }}
+
+    {{/* ── PAST EVENTS ── */}}
+    <div class="events-past-section">
+      {{ partial "section-header.html" (dict "number" "02" "title" "Past Events") }}
+
+      {{ if gt (len $past) 0 }}
+        {{ range $past.GroupByDate "2006" }}
+        <div class="year-group">
+          <h3 class="year-group-header">{{ .Key }}</h3>
+          <table class="events-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Event</th>
+                <th>Type</th>
+                <th class="location-col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ range sort .Pages "Date" "desc" }}
+              {{ $eventLink := .Params.url }}
+              <tr{{ if $eventLink }} onclick="window.open('{{ $eventLink }}', '_blank')"{{ end }}>
+                <td class="date-col">{{ .Date.Format "Jan 2, 2006" }}</td>
+                <td>
+                  {{ if $eventLink }}
+                    <a href="{{ $eventLink }}" target="_blank" rel="noopener">{{ .Title }}</a>
+                  {{ else }}
+                    {{ .Title }}
+                  {{ end }}
+                </td>
+                <td class="type-col">
+                  <span class="event-type event-type-{{ .Params.type | default "other" }}">{{ .Params.type | default "event" }}</span>
+                </td>
+                <td class="location-col">{{ .Params.location }}</td>
+              </tr>
+              {{ end }}
+            </tbody>
+          </table>
+        </div>
+        {{ end }}
+      {{ else }}
+        <p class="events-empty">No past events listed yet.</p>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

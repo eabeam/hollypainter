@@ -1,0 +1,2431 @@
+/* ================================================================
+   OPTION B — Holly Painter Design System
+   Consolidated from all mockup files + new additions
+   ================================================================ */
+
+/* ── DESIGN TOKENS ── */
+:root {
+  --black: #0a0a0a;
+  --off-black: #1a1a1a;
+  --charcoal: #2c2c2c;
+  --white: #f8f8f6;
+  --off-white: #eeece8;
+  --vermillion: #e84530;
+  --vermillion-dark: #c73a28;
+  --teal: #1a8a7d;
+  --teal-dark: #14706a;
+  --mid: #999;
+  --light: #bbb;
+  --grid-line: rgba(255,255,255,0.07);
+  --text: rgba(248,248,246,0.85);
+  --text-muted: rgba(248,248,246,0.7);
+}
+
+/* ── RESET ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--vermillion); }
+a:hover { color: var(--vermillion-dark); }
+
+/* ── SKIP LINK (accessibility) ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--vermillion);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  text-decoration: none;
+  z-index: 200;
+  border-radius: 0 0 4px 4px;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── FOCUS VISIBLE (keyboard accessibility) ── */
+:focus-visible {
+  outline: 2px solid var(--vermillion);
+  outline-offset: 2px;
+}
+a:focus-visible {
+  outline: 2px solid var(--vermillion);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+button:focus-visible {
+  outline: 2px solid var(--vermillion);
+  outline-offset: 2px;
+}
+.btn-fill:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 3px;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: var(--vermillion);
+}
+
+/* ── GRID TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ================================================================
+   NAV
+   ================================================================ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--vermillion); }
+.nav-links { display: flex; gap: 0.25rem; }
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--light);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.nav-links a:hover {
+  color: var(--white);
+  border-color: rgba(255,255,255,0.15);
+}
+.nav-links a.active {
+  color: var(--vermillion);
+  border-color: var(--vermillion);
+}
+
+/* ── HAMBURGER TOGGLE (mobile) ── */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 110;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+
+/* ================================================================
+   SECTIONS (generic)
+   ================================================================ */
+section {
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+.section-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.section-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.section-desc {
+  font-size: 1rem;
+  color: var(--mid);
+  max-width: 500px;
+}
+
+/* ================================================================
+   PAGE HEADER (breadcrumb + title + role tag)
+   ================================================================ */
+.page-header {
+  margin-top: 64px;
+  padding: 5rem 2rem 3rem;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.page-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.page-breadcrumb {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.page-breadcrumb a {
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.page-breadcrumb a:hover { color: var(--white); }
+.page-breadcrumb .sep { color: var(--vermillion); margin: 0 0.5rem; }
+.page-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.page-title .filled { color: var(--white); }
+.page-title .outlined {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--vermillion);
+}
+.page-role-tag {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--vermillion);
+  margin-bottom: 1.5rem;
+}
+.page-intro {
+  font-size: 1.1rem;
+  color: rgba(248,248,246,0.85);
+  line-height: 1.8;
+  font-weight: 400;
+  max-width: 700px;
+}
+.page-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--mid);
+  letter-spacing: 0.05em;
+}
+
+/* ── PAGE HERO (poetry landing variant) ── */
+.page-hero {
+  margin-top: 64px;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.page-hero-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.page-hero-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.page-hero-title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 1.25rem;
+}
+.page-hero-title .outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--vermillion);
+}
+.page-hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--mid);
+  margin-bottom: 3rem;
+  max-width: 500px;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  width: fit-content;
+}
+.stats-bar .stat {
+  padding: 1.25rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--light);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.stats-bar .stat:last-child { border-right: none; }
+.stats-bar .stat strong {
+  color: var(--white);
+  font-weight: 700;
+}
+.stats-bar .stat .accent {
+  color: var(--vermillion);
+  font-weight: 700;
+}
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn-fill {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  background: var(--vermillion);
+  color: var(--white);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-fill:hover { background: var(--vermillion-dark); transform: translateY(-1px); }
+.btn-ghost {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  background: transparent;
+  color: var(--white);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--white); transform: translateY(-1px); }
+.btn-teal {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  background: var(--teal);
+  color: var(--white);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-teal:hover { background: #157a6e; transform: translateY(-1px); }
+
+.cta-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.cta-section {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: var(--off-black);
+}
+
+/* ================================================================
+   HERO (homepage)
+   ================================================================ */
+.hero {
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 2rem;
+}
+.hero-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Crossword grid decoration */
+.hero-grid-deco {
+  position: absolute;
+  top: 50%;
+  right: -5%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 3px;
+  opacity: 0.1;
+  z-index: 0;
+}
+.hero-grid-deco div {
+  background: var(--white);
+  border-radius: 1px;
+}
+.hero-grid-deco div:nth-child(3),
+.hero-grid-deco div:nth-child(7),
+.hero-grid-deco div:nth-child(12),
+.hero-grid-deco div:nth-child(18),
+.hero-grid-deco div:nth-child(25),
+.hero-grid-deco div:nth-child(31),
+.hero-grid-deco div:nth-child(38),
+.hero-grid-deco div:nth-child(42),
+.hero-grid-deco div:nth-child(50),
+.hero-grid-deco div:nth-child(55),
+.hero-grid-deco div:nth-child(60) { background: var(--black); }
+
+.hero-name {
+  font-size: 5.5rem;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+}
+.hero-name .first { color: var(--white); display: block; }
+.hero-name .last {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--vermillion);
+  display: block;
+}
+.hero-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+.hero-subtitle strong { color: var(--white); font-weight: 700; }
+.hero-subtitle .divider { color: var(--vermillion); margin: 0 0.5rem; }
+
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.hero-photo {
+  position: relative;
+  max-width: 360px;
+  justify-self: end;
+}
+.hero-photo-frame {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--charcoal);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.hero-photo-label {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ================================================================
+   POEM WIDGET (homepage)
+   ================================================================ */
+.poem-section {
+  background: var(--off-black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.poem-widget {
+  display: grid;
+  grid-template-columns: 56px 1fr 260px;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.poem-clue-num {
+  background: var(--vermillion);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--white);
+  writing-mode: vertical-rl;
+  letter-spacing: 0.1em;
+}
+.poem-body {
+  padding: 3rem;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.poem-excerpt {
+  font-size: 1.15rem;
+  line-height: 2;
+  color: rgba(248,248,246,0.85);
+  font-weight: 400;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+.poem-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.poem-title-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--white);
+  font-weight: 700;
+}
+.poem-pub-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+}
+.poem-sidebar {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.poem-sidebar-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.poem-sidebar-stat {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.poem-sidebar-desc {
+  font-size: 0.8rem;
+  color: var(--mid);
+  margin-bottom: 1.5rem;
+}
+.poem-refresh-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  background: none;
+  border: 1px solid var(--vermillion);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  width: fit-content;
+}
+.poem-refresh-btn:hover {
+  background: var(--vermillion);
+  color: var(--white);
+}
+
+/* ================================================================
+   BOOKS (homepage row)
+   ================================================================ */
+.books-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.book-cell {
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.book-cell:last-child { border-right: none; }
+.book-cell:hover { background: rgba(255,255,255,0.03); }
+.book-cell:hover .book-cell-num { color: var(--vermillion); }
+.book-cover-area {
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  position: relative;
+}
+.book-cover-area .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+.book-cover-area .placeholder img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.book-cover-area .placeholder span {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.3;
+}
+.book-cell-info {
+  padding: 1.5rem;
+}
+.book-cell-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+.book-cell-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+  color: var(--white);
+}
+.book-cell-press {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+}
+
+/* ================================================================
+   BOOK DETAIL PAGE
+   ================================================================ */
+.book-section {
+  padding: 5rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+.book-section-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.book-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.book-layout.reversed {
+  grid-template-columns: 1fr 380px;
+}
+.book-layout.reversed .book-cover-col { order: 2; }
+.book-layout.reversed .book-info-col { order: 1; }
+.book-cover-col {
+  position: sticky;
+  top: 100px;
+}
+.book-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.book-cover-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.book-cover-placeholder span {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+}
+.book-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.book-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+.book-publisher {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+  margin-bottom: 2rem;
+}
+.book-description {
+  font-size: 1rem;
+  color: rgba(248,248,246,0.8);
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+.book-description p {
+  margin-bottom: 1rem;
+}
+.book-description p:last-child {
+  margin-bottom: 0;
+}
+.book-buy-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+.book-divider {
+  max-width: 1400px;
+  margin: 0 auto;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PRAISE / REVIEWS ── */
+.praise-section {
+  margin-top: 3rem;
+}
+.praise-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.praise-quote {
+  margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--vermillion);
+}
+.praise-quote blockquote {
+  font-size: 0.95rem;
+  color: rgba(248,248,246,0.75);
+  line-height: 1.85;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+.praise-quote .attribution {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  letter-spacing: 0.03em;
+}
+.praise-quote .attribution a {
+  color: var(--vermillion);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.praise-quote .attribution a:hover {
+  color: var(--white);
+}
+
+/* ── SAMPLE POEMS ── */
+.samples-section {
+  margin-top: 3rem;
+}
+.samples-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.samples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.sample-card {
+  display: block;
+  padding: 1.25rem;
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.sample-card:hover {
+  background: var(--charcoal);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+.sample-card-journal {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.sample-card-title {
+  font-size: 0.85rem;
+  color: var(--white);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.sample-card-arrow {
+  font-size: 0.75rem;
+  color: var(--mid);
+  margin-top: 0.75rem;
+  transition: color 0.2s;
+}
+.sample-card:hover .sample-card-arrow {
+  color: var(--vermillion);
+}
+
+/* book-sample-grid: used in book content markdown */
+.book-sample-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* ================================================================
+   ROLES (homepage)
+   ================================================================ */
+.roles-section { border-top: 1px solid rgba(255,255,255,0.06); }
+.roles-bento {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.role-cell {
+  background: var(--black);
+  padding: 2.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  position: relative;
+}
+.role-cell:hover { background: var(--off-black); }
+.role-cell.wide { grid-column: span 2; }
+.role-cell-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.role-cell h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+.role-cell p {
+  font-size: 0.9rem;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 440px;
+}
+.role-cell .arrow {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  font-size: 1.2rem;
+  color: var(--mid);
+  transition: all 0.3s;
+}
+.role-cell:hover .arrow { color: var(--vermillion); transform: translate(4px, -4px); }
+
+/* Courses strip (homepage roles) */
+.courses-strip {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.course-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--light);
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  letter-spacing: 0.03em;
+}
+
+/* ================================================================
+   EVENTS TABLE
+   ================================================================ */
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.events-table thead th {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.events-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.events-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.events-table td {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.9rem;
+}
+.events-table .date-col {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--vermillion);
+  white-space: nowrap;
+  width: 140px;
+}
+.events-table .type-col {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  width: 120px;
+}
+.events-table .location-col {
+  color: var(--mid);
+  font-size: 0.85rem;
+}
+
+/* ================================================================
+   POEMS GRID (poetry landing)
+   ================================================================ */
+.poems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.poem-card {
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.poem-card:hover {
+  background: var(--off-black);
+  border-color: rgba(255,255,255,0.12);
+  z-index: 2;
+}
+.poem-card:hover .poem-card-cover {
+  border-bottom-color: var(--vermillion);
+}
+.poem-card-cover {
+  width: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s;
+  position: relative;
+}
+.poem-card-cover .journal-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.poem-card-info {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.poem-card-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+.poem-card-journal {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  letter-spacing: 0.03em;
+  margin-top: auto;
+}
+.poem-card-tbd {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.03em;
+  margin-top: 0.3rem;
+}
+
+/* ================================================================
+   BENTO GRID (teaching, crvt)
+   ================================================================ */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.bento-card {
+  background: var(--black);
+  padding: 2.5rem;
+  transition: all 0.3s;
+  position: relative;
+}
+.bento-card:hover { background: var(--off-black); }
+.bento-card.full-width { grid-column: span 2; }
+.bento-card-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.bento-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+.bento-card p {
+  font-size: 0.9rem;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 500px;
+}
+
+/* ================================================================
+   COURSE CARDS (teaching)
+   ================================================================ */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.course-card {
+  background: var(--black);
+  padding: 2rem;
+  transition: all 0.3s;
+  position: relative;
+}
+.course-card:hover { background: var(--off-black); }
+.course-card-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  transition: color 0.3s;
+}
+.course-card:hover .course-card-num { color: var(--vermillion); }
+.course-card h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.course-card p {
+  font-size: 0.85rem;
+  color: var(--mid);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ================================================================
+   PROGRAM TAGS (teaching)
+   ================================================================ */
+.program-tags {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.program-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--light);
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  letter-spacing: 0.03em;
+  transition: all 0.2s;
+}
+.program-tag:hover {
+  border-color: var(--vermillion);
+  color: var(--white);
+}
+
+/* ================================================================
+   AWARD BANNER (teaching)
+   ================================================================ */
+.award-banner {
+  background: var(--off-black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+.award-banner-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.award-icon-area {
+  background: var(--vermillion);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+.award-content {
+  padding: 2rem 2.5rem;
+}
+.award-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.award-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.award-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mid);
+}
+
+/* ================================================================
+   WRITING CENTER HIGHLIGHT (teaching)
+   ================================================================ */
+.wc-highlight {
+  background: rgba(26,138,125,0.06);
+  border-left: 3px solid var(--teal);
+  padding: 1.25rem 1.5rem;
+  margin-top: 1rem;
+}
+.wc-highlight p {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--teal);
+  line-height: 1.6;
+}
+
+/* ================================================================
+   PROMINENT LINK
+   ================================================================ */
+.prominent-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 1.5rem 2rem;
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+.prominent-link:hover {
+  background: var(--charcoal);
+  border-color: var(--vermillion);
+}
+.prominent-link .link-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+.prominent-link .link-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.prominent-link .link-url {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  margin-top: 0.25rem;
+}
+.prominent-link .arrow {
+  margin-left: auto;
+  font-size: 1.4rem;
+  color: var(--mid);
+  transition: all 0.3s;
+}
+.prominent-link:hover .arrow {
+  color: var(--vermillion);
+  transform: translate(4px, -4px);
+}
+
+/* ================================================================
+   DESCRIPTION BLOCK (crvt, generic)
+   ================================================================ */
+.description-block {
+  max-width: 800px;
+  margin-bottom: 3rem;
+}
+.description-block p {
+  font-size: 1.1rem;
+  color: rgba(248,248,246,0.85);
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+/* ── PLACEHOLDER NOTE ── */
+.placeholder-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--teal);
+  background: rgba(26,138,125,0.08);
+  border: 1px solid rgba(26,138,125,0.2);
+  padding: 1rem 1.25rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+/* ================================================================
+   EVENTS AREA (crvt)
+   ================================================================ */
+.events-area {
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 3rem;
+  position: relative;
+}
+.events-area-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.events-area p {
+  font-size: 0.95rem;
+  color: var(--mid);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.events-placeholder {
+  border: 2px dashed rgba(255,255,255,0.1);
+  padding: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.events-placeholder-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.4;
+}
+.events-placeholder-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+}
+
+/* ================================================================
+   WRITING TABLE
+   ================================================================ */
+.writing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.writing-table thead th {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.writing-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.writing-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.writing-table tbody tr.has-link { cursor: pointer; }
+.writing-table td {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.9rem;
+}
+.writing-table .title-col {
+  font-weight: 600;
+  color: var(--white);
+}
+.writing-table .title-col a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.writing-table .title-col a:hover {
+  color: var(--vermillion);
+}
+.writing-table .pub-col {
+  color: var(--light);
+  font-size: 0.85rem;
+}
+.writing-table .type-col {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  width: 180px;
+}
+.writing-table .link-col {
+  width: 80px;
+  text-align: right;
+}
+.writing-table .link-col a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+.writing-table .link-col a:hover {
+  color: var(--white);
+}
+.tbd-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
+/* ── CATEGORY SECTIONS (writing) ── */
+.category-section {
+  padding: 4rem 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+.category-section:first-of-type {
+  padding-top: 4rem;
+}
+.category-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.category-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.category-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+}
+.category-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.section-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 0;
+}
+
+/* ================================================================
+   OBSOLETE JOBS PROJECT (unique components)
+   ================================================================ */
+/* Documentary-style page header */
+.header-text-area {
+  padding: 5rem 3rem 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.page-subtitle-top {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.page-coauthor {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+  margin-bottom: 2rem;
+}
+.page-coauthor strong { color: var(--white); font-weight: 700; }
+.page-since {
+  font-family: 'Space Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--vermillion);
+  opacity: 0.15;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* Cover image placeholder */
+.header-image-area {
+  background: var(--charcoal);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+.header-image-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.cover-placeholder {
+  text-align: center;
+  padding: 3rem;
+}
+.cover-placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+.cover-placeholder-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--mid);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+.cover-placeholder-file {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.25);
+  margin-top: 0.75rem;
+  word-break: break-all;
+}
+
+/* Project description (2-col with sidebar) */
+.project-description {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.project-description-text p {
+  font-size: 1.1rem;
+  color: rgba(248,248,246,0.85);
+  line-height: 1.9;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+.project-description-text p:last-child { margin-bottom: 0; }
+
+/* Sidebar stats */
+.project-sidebar {
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--off-black);
+}
+.sidebar-item {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-item:last-child { border-bottom: none; }
+.sidebar-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.sidebar-value {
+  font-size: 1rem;
+  color: var(--white);
+  font-weight: 500;
+}
+.sidebar-value a {
+  color: var(--white);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  transition: border-color 0.2s;
+}
+.sidebar-value a:hover {
+  border-color: var(--vermillion);
+}
+
+/* Quote strip */
+.quote-strip {
+  background: var(--off-black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+.quote-strip-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 6px 1fr;
+  gap: 0;
+}
+.quote-strip-bar {
+  background: var(--vermillion);
+}
+.quote-strip-content {
+  padding: 3.5rem 3rem;
+}
+.quote-strip-text {
+  font-size: 1.4rem;
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(248,248,246,0.8);
+  line-height: 1.7;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+.quote-strip-attr {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+}
+
+/* External link blocks */
+.external-link-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.ext-link-card {
+  background: var(--black);
+  padding: 2.5rem;
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.3s;
+  position: relative;
+  display: block;
+}
+.ext-link-card:hover { background: var(--off-black); }
+.ext-link-card-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.ext-link-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.ext-link-card p {
+  font-size: 0.85rem;
+  color: var(--mid);
+  line-height: 1.6;
+}
+.ext-link-card .arrow {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 1.2rem;
+  color: var(--mid);
+  transition: all 0.3s;
+}
+.ext-link-card:hover .arrow {
+  color: var(--vermillion);
+  transform: translate(4px, -4px);
+}
+
+/* ================================================================
+   PAGE LIST (default list.html)
+   ================================================================ */
+.page-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.page-list-item {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.page-list-item:last-child { border-bottom: none; }
+.page-list-item:hover { background: rgba(255,255,255,0.02); }
+.page-list-item a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.page-list-item a:hover { color: var(--vermillion); }
+
+/* ================================================================
+   YOUTUBE EMBED (dark wrapper)
+   ================================================================ */
+.youtube-embed {
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+.youtube-embed iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+  display: block;
+}
+
+/* ================================================================
+   CONTENT TYPOGRAPHY (Hugo .Content rendered markdown)
+   ================================================================ */
+.content {
+  max-width: 800px;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(248,248,246,0.85);
+}
+.content h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 3rem 0 1.5rem;
+  color: var(--white);
+}
+.content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 2.5rem 0 1rem;
+  color: var(--white);
+}
+.content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+  color: var(--white);
+}
+.content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--white);
+}
+.content p {
+  margin-bottom: 1.25rem;
+}
+.content a {
+  color: var(--vermillion);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232,69,48,0.3);
+  transition: border-color 0.2s;
+}
+.content a:hover {
+  border-color: var(--vermillion);
+}
+.content strong {
+  color: var(--white);
+  font-weight: 600;
+}
+.content em {
+  font-style: italic;
+}
+.content ul, .content ol {
+  margin: 1rem 0 1.5rem 1.5rem;
+}
+.content li {
+  margin-bottom: 0.5rem;
+}
+.content blockquote {
+  border-left: 2px solid var(--vermillion);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: rgba(248,248,246,0.7);
+}
+.content hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 2.5rem 0;
+}
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+.content table th {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.content table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.9rem;
+}
+.content table tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+.content code {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85em;
+  background: rgba(255,255,255,0.06);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+  color: var(--vermillion);
+}
+.content pre {
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.content pre code {
+  background: none;
+  padding: 0;
+  color: var(--white);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+footer {
+  background: var(--off-black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 4rem 2rem;
+}
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.footer-brand span { color: var(--vermillion); }
+.footer-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; max-width: 340px; }
+.footer-col h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 1.25rem;
+}
+.footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--mid);
+  text-decoration: none;
+  margin-bottom: 0.65rem;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+  max-width: 1400px;
+  margin: 2.5rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.05em;
+}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.anim-up {
+  animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+.d1 { animation-delay: 0.1s; }
+.d2 { animation-delay: 0.2s; }
+.d3 { animation-delay: 0.35s; }
+.d4 { animation-delay: 0.5s; }
+.d5 { animation-delay: 0.65s; }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* ── 1024px breakpoint ── */
+@media (max-width: 1024px) {
+  /* Nav: show hamburger, hide links */
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-links.nav-open { display: flex; }
+  .nav-links a {
+    padding: 0.75rem 2rem;
+    border: none;
+    font-size: 0.8rem;
+  }
+
+  /* Hero */
+  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-name { font-size: 4rem; }
+  .hero-photo { max-width: 360px; }
+
+  /* Books */
+  .books-row { grid-template-columns: repeat(2, 1fr); }
+  .book-cell:nth-child(2) { border-right: none; }
+
+  /* Roles */
+  .roles-bento { grid-template-columns: 1fr; }
+  .role-cell.wide { grid-column: span 1; }
+
+  /* Poem widget */
+  .poem-widget { grid-template-columns: 60px 1fr; }
+  .poem-sidebar { display: none; }
+
+  /* Poetry page */
+  .page-hero-title { font-size: 3.5rem; }
+  .poems-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-bar { flex-wrap: wrap; }
+  .stats-bar .stat { border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+  /* Poem single */
+  .poem-single-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .poem-single-cover { position: static; max-width: 320px; }
+
+  /* Bibliography */
+  .bibliography-controls { grid-template-columns: 1fr 1fr; }
+
+  /* Book detail */
+  .book-layout,
+  .book-layout.reversed {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .book-layout.reversed .book-cover-col { order: 0; }
+  .book-layout.reversed .book-info-col { order: 0; }
+  .book-cover-col {
+    position: static;
+    max-width: 320px;
+  }
+
+  /* Teaching */
+  .courses-grid { grid-template-columns: repeat(2, 1fr); }
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento-card.full-width { grid-column: span 1; }
+  .award-banner-inner { grid-template-columns: 80px 1fr; }
+
+  /* Page header */
+  .page-title { font-size: 2.5rem; }
+
+  /* Obsolete Jobs */
+  .page-header-inner { grid-template-columns: 1fr; }
+  .header-image-area {
+    min-height: 300px;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .header-text-area { padding: 4rem 2rem 3rem; }
+  .project-description { grid-template-columns: 1fr; gap: 2rem; }
+  .external-link-block { grid-template-columns: 1fr; }
+
+  /* Writing */
+  /* (page-title already addressed above) */
+
+  /* Footer */
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── 640px breakpoint ── */
+@media (max-width: 640px) {
+  section { padding: 4rem 1.25rem; }
+  .page-header { padding: 4rem 1.25rem 2rem; }
+  .page-hero { padding: 4rem 1.25rem 3rem; }
+  .hero-name { font-size: 3rem; }
+  .page-title { font-size: 2rem; }
+  .page-hero-title { font-size: 2.5rem; }
+  .section-title { font-size: 2rem; }
+  .category-title { font-size: 1.6rem; }
+
+  /* Books */
+  .books-row { grid-template-columns: 1fr; }
+  .book-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .book-section { padding: 3rem 1.25rem; }
+  .book-title { font-size: 1.8rem; }
+  .book-cover-col { max-width: 260px; }
+  .samples-grid { grid-template-columns: 1fr; }
+  .book-buy-links { flex-direction: column; }
+  .book-buy-links a { text-align: center; }
+
+  /* Events */
+  .events-table .location-col { display: none; }
+
+  /* Poetry */
+  .poems-grid { grid-template-columns: 1fr; }
+  .stats-bar { width: 100%; }
+  .stats-bar .stat { flex: 1; padding: 1rem 1.25rem; font-size: 0.65rem; }
+  .cta-buttons { flex-direction: column; }
+  .cta-buttons a { text-align: center; }
+
+  /* Teaching */
+  .courses-grid { grid-template-columns: 1fr; }
+  .award-banner-inner { grid-template-columns: 1fr; }
+  .award-icon-area { padding: 1rem; }
+  .section-title { font-size: 1.8rem; }
+
+  /* CRVT / Obsolete Jobs */
+  .header-text-area { padding: 3rem 1.25rem 2rem; }
+  .quote-strip-content { padding: 2rem 1.5rem; }
+  .quote-strip-text { font-size: 1.1rem; }
+
+  /* Writing */
+  .category-section { padding: 3rem 1.25rem 1.5rem; }
+  .writing-table .type-col { display: none; }
+
+  /* Poem single */
+  .poem-single-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .poem-single-cover { max-width: 320px; }
+
+  /* Bibliography */
+  .bibliography-controls { grid-template-columns: 1fr; }
+
+  /* 404 */
+  .error-404-number { font-size: 5rem; }
+  .error-404-title { font-size: 1.5rem; }
+
+  /* Contact form */
+  .contact-form input[type="text"],
+  .contact-form input[type="email"],
+  .contact-form textarea { padding: 0.75rem 1rem; }
+
+  /* Footer */
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; }
+}
+
+/* ── 375px breakpoint (small phones) ── */
+@media (max-width: 375px) {
+  .hero-name { font-size: 2.4rem; }
+  .hero-subtitle { font-size: 0.7rem; gap: 0.4rem; }
+  .hero-ctas { flex-direction: column; }
+  .hero-ctas a { text-align: center; }
+  .page-title { font-size: 1.6rem; }
+  .page-hero-title { font-size: 2rem; }
+  .section-title { font-size: 1.5rem; }
+  .section-number { font-size: 0.6rem; }
+  .poem-widget { grid-template-columns: 1fr; }
+  .poem-clue-num { display: none; }
+  .error-404-number { font-size: 3.5rem; }
+  .nav-links a { padding: 0.6rem 1.5rem; }
+}
+
+/* ================================================================
+   POEM SINGLE PAGE
+   ================================================================ */
+.poem-single-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 4rem;
+  align-items: start;
+  max-width: 1000px;
+}
+.poem-single-cover {
+  position: sticky;
+  top: 100px;
+}
+.poem-single-cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.poem-single-publisher {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mid);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+.poem-single-excerpt {
+  margin-bottom: 2rem;
+}
+.poem-single-excerpt p {
+  font-size: 1.1rem;
+  color: rgba(248,248,246,0.85);
+  line-height: 1.9;
+  font-weight: 400;
+  font-style: italic;
+}
+.poem-single-actions {
+  margin-bottom: 2rem;
+}
+
+/* ================================================================
+   BIBLIOGRAPHY PAGE
+   ================================================================ */
+.bibliography-controls {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  align-items: end;
+}
+.bibliography-label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.bibliography-input,
+.bibliography-select {
+  width: 100%;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  color: var(--white);
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+.bibliography-input:focus,
+.bibliography-select:focus {
+  outline: none;
+  border-color: var(--vermillion);
+}
+.bibliography-input::placeholder {
+  color: var(--mid);
+}
+.bibliography-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+.bibliography-select option {
+  background: var(--off-black);
+  color: var(--white);
+}
+
+.bibliography-list {
+  list-style: none;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.bibliography-item {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.bibliography-item:last-child {
+  border-bottom: none;
+}
+.bibliography-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+.bibliography-item-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+}
+.bibliography-item-title a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.bibliography-item-title a:hover {
+  color: var(--vermillion);
+}
+.bibliography-item-meta {
+  font-size: 0.85rem;
+  color: var(--mid);
+  margin-bottom: 0.25rem;
+}
+.bibliography-item-date {
+  color: var(--mid);
+}
+.bibliography-item-link a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--vermillion);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+.bibliography-item-link a:hover {
+  color: var(--white);
+}
+
+/* Poem card as link: remove default link styles */
+a.poem-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ================================================================
+   EVENTS PAGE — year groups & event type badges
+   ================================================================ */
+.events-past-section {
+  margin-top: 4rem;
+}
+.year-group {
+  margin-bottom: 3rem;
+}
+.year-group-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.events-empty {
+  font-size: 1rem;
+  color: var(--mid);
+  padding: 2rem 0;
+}
+
+/* Event type badges */
+.event-type {
+  display: inline-block;
+}
+.events-table td a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.events-table td a:hover {
+  color: var(--vermillion);
+}
+
+/* ================================================================
+   CV DOWNLOAD (prominent-link variant)
+   ================================================================ */
+.cv-download .link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--charcoal);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--vermillion);
+  flex-shrink: 0;
+}
+.cv-download:hover .link-icon {
+  background: var(--vermillion);
+  color: var(--white);
+  border-color: var(--vermillion);
+}
+.cv-download .arrow {
+  font-size: 1.6rem;
+}
+
+/* ================================================================
+   CONTACT FORM
+   ================================================================ */
+.contact-email {
+  margin-bottom: 2rem;
+}
+.contact-email h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.contact-email a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+.contact-email a:hover {
+  color: var(--vermillion);
+}
+
+.contact-form-wrapper {
+  max-width: 600px;
+  margin-top: 2rem;
+}
+.contact-form .form-group {
+  margin-bottom: 1.5rem;
+}
+.contact-form label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  background: var(--off-black);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+.contact-form input[type="text"]:focus,
+.contact-form input[type="email"]:focus,
+.contact-form textarea:focus {
+  border-color: var(--vermillion);
+  background: var(--charcoal);
+}
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--mid);
+  opacity: 0.6;
+}
+.contact-form textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+.btn-submit {
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+/* ================================================================
+   404 PAGE
+   ================================================================ */
+.error-404 {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+.error-404-inner {
+  text-align: center;
+  max-width: 500px;
+}
+.error-404-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 8rem;
+  font-weight: 700;
+  color: var(--vermillion);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 1rem;
+}
+.error-404-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.error-404-text {
+  font-size: 1rem;
+  color: var(--mid);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}

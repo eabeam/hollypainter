@@ -1,0 +1,335 @@
+{{ define "main" }}
+{{/* ── Homepage layout for Option B ── */}}
+{{ $hero := .Params.hero }}
+
+<!-- ══════════════════════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <!-- Crossword grid decoration (8x8, purely decorative) -->
+  <div class="hero-grid-deco" aria-hidden="true">
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+  </div>
+
+  <div class="hero-inner">
+    <div>
+      {{/* Split name into first + last for the filled/outlined effect */}}
+      {{ $nameParts := split ($hero.name | default "Holly Painter") " " }}
+      <div class="hero-name anim-up">
+        <span class="first">{{ index $nameParts 0 }}</span>
+        <span class="last">{{ if gt (len $nameParts) 1 }}{{ index $nameParts 1 }}{{ end }}</span>
+      </div>
+      <div class="hero-subtitle anim-up d1">
+        <strong>Poet</strong> <span class="divider">//</span>
+        <strong>Senior Lecturer</strong>, UVM English <span class="divider">//</span>
+        <strong>Director</strong>, Center for Research on Vermont
+      </div>
+      <div class="hero-ctas anim-up d2">
+        <a href="{{ $hero.cta_link | default "/books/" }}" class="btn-fill">{{ $hero.cta_label | default "Browse Books" }}</a>
+        <a href="{{ "poetry/" | relLangURL }}" class="btn-ghost">Featured Poetry</a>
+        <a href="https://www.uvm.edu/cas/english/profile/holly-painter" class="btn-ghost" target="_blank" rel="noopener">UVM Profile &#8599;</a>
+      </div>
+    </div>
+    <div class="hero-photo anim-up d3">
+      <div class="hero-photo-frame">
+        {{ with $hero.image }}
+        <img src="{{ . | absURL }}" alt="{{ $hero.name }}" style="width:100%;height:100%;object-fit:cover;object-position:65% 25%;">
+        {{ end }}
+      </div>
+      <div class="hero-photo-label">{{ site.Params.address | default "Burlington, Vermont" }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FEATURED POEM WIDGET
+     ══════════════════════════════════════════════════════════════ -->
+{{/* Query poetry pages — prefer featured, fall back to first 12 */}}
+{{ $poetryPages := where .Site.RegularPages "Section" "poetry" }}
+{{ $featured := where $poetryPages "Params.featured" true }}
+{{ if eq (len $featured) 0 }}
+  {{ $featured = first 12 $poetryPages }}
+{{ end }}
+
+<section class="poem-section" id="poetry">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">{{ .Params.featured_poetry_title | default "Featured Poetry" }}</h2>
+    </div>
+    <div class="poem-widget" id="poemWidget">
+      <div class="poem-clue-num" aria-hidden="true"></div>
+      <div class="poem-body">
+        <div class="poem-excerpt" id="poemExcerpt">
+          {{/* Initial poem text — JS will replace this */}}
+          {{ with index $featured 0 }}
+            {{ with .Params.excerpt }}
+              {{ . | markdownify }}
+            {{ else }}
+              <em style="font-size:0.9rem;color:var(--mid);">From {{ (index $featured 0).Params.publisher | default "the archive" }}</em>
+            {{ end }}
+          {{ end }}
+        </div>
+        <div class="poem-meta-line">
+          {{ with index $featured 0 }}
+          <span class="poem-title-text" id="poemTitle">"{{ .Params.work_title | default .Title }}"</span>
+          <span class="poem-pub-text" id="poemPub">{{ with .Params.publisher }}&mdash; {{ . }}{{ end }}</span>
+          {{ end }}
+        </div>
+      </div>
+      <div class="poem-sidebar">
+        <div>
+          <div class="poem-sidebar-label">Poetry</div>
+          <div class="poem-sidebar-stat">{{ len $poetryPages }}</div>
+          <div class="poem-sidebar-desc">poems published</div>
+        </div>
+        <button class="poem-refresh-btn" onclick="showRandomPoem()">&#8635; Another poem</button>
+      </div>
+    </div>
+    <div style="margin-top:2rem; display:flex; gap:1rem;">
+      <a href="{{ "poetry/" | relLangURL }}" class="btn-ghost">All Featured Poetry &rarr;</a>
+      <a href="{{ "poetry/bibliography/" | relLangURL }}" class="btn-ghost">Full Catalog &rarr;</a>
+    </div>
+  </div>
+</section>
+
+{{/* Generate poem data as JSON array for the JS widget */}}
+{{ $poemData := slice }}
+{{ range $featured }}
+  {{ $excerpt := .Params.excerpt | default (printf "<em style='font-size:0.9rem;color:var(--mid);'>This poem appears in %s</em>" (.Params.publisher | default "the archive")) }}
+  {{ $title := printf `"%s"` (.Params.work_title | default .Title) }}
+  {{ $pub := "" }}
+  {{ with .Params.publisher }}{{ $pub = printf "— %s" . }}{{ end }}
+  {{ $url := .Params.url | default .RelPermalink }}
+  {{ $poemData = $poemData | append (dict "excerpt" $excerpt "title" $title "pub" $pub "url" $url) }}
+{{ end }}
+<script>
+const poems = {{ $poemData | jsonify | safeJS }};
+
+function showRandomPoem() {
+  const body = document.querySelector('.poem-body');
+  body.style.opacity = '0';
+  body.style.transition = 'opacity 0.25s';
+  setTimeout(() => {
+    const poem = poems[Math.floor(Math.random() * poems.length)];
+    document.getElementById('poemExcerpt').innerHTML = poem.excerpt;
+    document.getElementById('poemTitle').textContent = poem.title;
+    document.getElementById('poemPub').textContent = poem.pub;
+    body.style.opacity = '1';
+  }, 250);
+}
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BOOKS
+     ══════════════════════════════════════════════════════════════ -->
+{{ $booksSection := site.GetPage "section" "books" }}
+{{ $books := slice }}
+{{ with $booksSection }}
+  {{ $books = .Sections }}
+{{ end }}
+{{ $books = where $books "Params.home_exclude" "ne" true }}
+{{/* Sort by weight if present, otherwise by title */}}
+{{ $weightedBooks := where $books "Params.weight" "ne" nil }}
+{{ if gt (len $weightedBooks) 0 }}
+  {{ $weightedBooks = sort $weightedBooks "Params.weight" "asc" }}
+  {{ $unweightedBooks := where $books "Params.weight" "eq" nil }}
+  {{ $unweightedBooks = sort $unweightedBooks "Title" "asc" }}
+  {{ $books = $weightedBooks | append $unweightedBooks }}
+{{ else }}
+  {{ $books = sort $books "Title" "asc" }}
+{{ end }}
+{{ $books = first 4 $books }}
+
+<section id="books">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">{{ .Params.books_title | default "Books" }}</h2>
+      <p class="section-desc">Full-length collections. Click to explore.</p>
+    </div>
+    <div class="books-row">
+      {{ range $i, $book := $books }}
+      <a href="{{ $book.RelPermalink }}" class="book-cell">
+        <div class="book-cover-area">
+          <div class="placeholder" style="background:var(--charcoal);">
+            {{ with $book.Params.cover }}
+            <img src="{{ . | absURL }}" alt="{{ $book.Title }}" style="">
+            {{ else }}
+            <span>{{ $book.Title }}</span>
+            {{ end }}
+          </div>
+        </div>
+        <div class="book-cell-info">
+          <div class="book-cell-num">{{ printf "%02d" (add $i 1) }}</div>
+          <div class="book-cell-title">{{ $book.Title }}</div>
+          {{ with $book.Params.publisher }}
+          <div class="book-cell-press">{{ . }}</div>
+          {{ end }}
+          {{/* Extract publisher from first buy_link label if no publisher field */}}
+          {{ if not $book.Params.publisher }}
+            {{ with $book.Params.buy_links }}
+              {{ with index . 0 }}
+              <div class="book-cell-press">{{ .label }}</div>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      </a>
+      {{ end }}
+    </div>
+    <div style="margin-top:2rem">
+      <a href="{{ "books/" | relLangURL }}" class="btn-ghost">Book details, reviews &amp; sample poems &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     ACADEMIC ROLES (bento grid)
+     ══════════════════════════════════════════════════════════════ -->
+<section class="roles-section" id="roles">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Academic Life</h2>
+    </div>
+    <div class="roles-bento">
+
+      <a href="{{ "research/crvt/" | relLangURL }}" class="role-cell wide">
+        <div class="role-cell-tag">Director</div>
+        <h3>Center for Research on Vermont</h3>
+        <p>UVM's hub for Vermont-focused scholarship, connecting faculty, students, and communities across the state.</p>
+        <span class="arrow">&#8599;</span>
+      </a>
+
+      <a href="{{ "research/obsolete-jobs-project/" | relLangURL }}" class="role-cell">
+        <div class="role-cell-tag">Research</div>
+        <h3>Obsolete Jobs Project</h3>
+        <p>Oral histories with Americans whose jobs are disappearing. With economist EeCheng Ong.</p>
+        <span class="arrow">&#8599;</span>
+      </a>
+
+      <a href="{{ "teaching/" | relLangURL }}" class="role-cell">
+        <div class="role-cell-tag">Teaching</div>
+        <h3>Senior Lecturer, UVM English</h3>
+        <p>Award-winning, student-centered courses. 2020 Kroepsch-Maurice Excellence in Teaching Award.</p>
+        <div class="courses-strip">
+          <span class="course-tag">Climate Change in Sci-Fi</span>
+          <span class="course-tag">Harry Potter</span>
+          <span class="course-tag">Oral History</span>
+          <span class="course-tag">Creative Writing</span>
+        </div>
+        <span class="arrow">&#8599;</span>
+      </a>
+
+      <a href="{{ "about/" | relLangURL }}" class="role-cell wide">
+        <div class="role-cell-tag">Service</div>
+        <h3>Writing Centers &amp; Community</h3>
+        <p>Former Interim Coordinator of the Graduate Writing Center and Interim Director of the Undergraduate Writing Center. Board of Trustees, South Burlington Public Library. Teaching across UVM programs including Honors College, Arts &amp; Creativity LC, Liberal Arts Scholars, and Liberal Arts in Prison.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     UPCOMING EVENTS
+     ══════════════════════════════════════════════════════════════ -->
+{{ $allEvents := where .Site.RegularPages "Section" "events" }}
+{{ $upcoming := where $allEvents "Date" "gt" now }}
+{{ $upcoming = sort $upcoming "Date" "asc" }}
+{{/* If no upcoming events, show most recent past events */}}
+{{ $eventsToShow := $upcoming }}
+{{ if eq (len $eventsToShow) 0 }}
+  {{ $eventsToShow = first 5 (sort $allEvents "Date" "desc") }}
+{{ end }}
+{{ $eventsToShow = first 5 $eventsToShow }}
+
+{{ if gt (len $eventsToShow) 0 }}
+<section id="events">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">{{ .Params.events_title | default "Events" }}</h2>
+    </div>
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Location</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $eventsToShow }}
+        <tr{{ with .Params.url }} onclick="window.location='{{ . }}'"{{ end }}>
+          <td class="date-col">{{ .Date.Format "Jan 2, 2006" }}</td>
+          <td>
+            {{ with .Params.url }}<a href="{{ . }}" style="color:inherit;text-decoration:none;">{{ end }}
+            {{ .Title }}
+            {{ with .Params.url }}</a>{{ end }}
+          </td>
+          <td class="location-col">{{ .Params.location | default "" }}</td>
+          <td class="type-col">{{ .Type | default "" }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+    <div style="margin-top:2rem">
+      <a href="{{ "events/" | relLangURL }}" class="btn-ghost">All events &rarr;</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<!-- ══════════════════════════════════════════════════════════════
+     BIO / ABOUT
+     ══════════════════════════════════════════════════════════════ -->
+{{ with .Params.bio_text }}
+<section class="cta-section" id="about">
+  <div class="section-inner" style="display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:center;">
+    <div>
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title">About</h2>
+      </div>
+      <div class="page-intro">{{ . | markdownify }}</div>
+    </div>
+    <div>
+      <a href="{{ "about/" | relLangURL }}" class="btn-ghost">Read Full Bio &rarr;</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<!-- ══════════════════════════════════════════════════════════════
+     CONTACT CTA
+     ══════════════════════════════════════════════════════════════ -->
+{{ with .Params.contact_title }}
+<section id="contact">
+  <div class="section-inner" style="display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:center;">
+    <div>
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2 class="section-title">{{ . }}</h2>
+      </div>
+      {{ with $.Params.contact_cta }}
+      <p class="page-intro">{{ . }}</p>
+      {{ end }}
+    </div>
+    <div>
+      <a href="{{ $.Params.contact_link | default "/contact/" }}" class="btn-fill">Get in touch</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ end }}

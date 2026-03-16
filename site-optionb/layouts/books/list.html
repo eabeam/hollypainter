@@ -1,0 +1,195 @@
+{{ define "main" }}
+
+{{ if gt (len .Sections) 0 }}
+{{/* ════════════════════════════════════════════════════════════════
+     BOOKS LANDING — shows all books in alternating layout
+     ════════════════════════════════════════════════════════════════ */}}
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb anim-up">
+      <a href="/">Home</a>
+      <span class="sep">//</span>
+      Books
+    </div>
+    <h1 class="page-title anim-up d1">
+      <span class="filled">Bo</span><span class="outlined">oks</span>
+    </h1>
+    {{ with .Params.intro }}
+    <p class="page-subtitle anim-up d2">{{ . }}</p>
+    {{ end }}
+  </div>
+</div>
+
+{{ with .Content }}
+<section>
+  <div class="section-inner">
+    <div class="description-block">
+      {{ . }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<!-- BOOKS -->
+{{ $books := .Sections }}
+{{/* Sort: weighted books first (by weight asc), then unweighted by pub_date desc */}}
+{{ $weightedBooks := where $books "Params.weight" "ne" nil }}
+{{ if gt (len $weightedBooks) 0 }}
+  {{ $weightedBooks = sort $weightedBooks "Params.weight" "asc" }}
+  {{ $unweightedBooks := where $books "Params.weight" "eq" nil }}
+  {{ $unweightedBooks = sort $unweightedBooks "Params.pub_date" "desc" }}
+  {{ $books = $weightedBooks | append $unweightedBooks }}
+{{ else }}
+  {{ $books = sort $books "Params.pub_date" "desc" }}
+{{ end }}
+
+{{/* Filter out books marked for home exclusion (like Obsolete Jobs under books) */}}
+{{ $displayBooks := slice }}
+{{ range $books }}
+  {{ if not .Params.home_exclude }}
+    {{ $displayBooks = $displayBooks | append . }}
+  {{ end }}
+{{ end }}
+
+{{ range $i, $book := $displayBooks }}
+
+{{ if gt $i 0 }}
+<hr class="book-divider">
+{{ end }}
+
+<section class="book-section" id="book-{{ printf "%02d" (add $i 1) }}">
+  <div class="book-section-inner">
+    <div class="book-layout{{ if eq (mod $i 2) 1 }} reversed{{ end }}">
+
+      <!-- COVER -->
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder">
+          {{ with $book.Params.cover }}
+          <img src="{{ . }}" alt="{{ $book.Title }}" style="width:100%;height:100%;object-fit:contain;">
+          {{ else }}
+          <span>{{ $book.Title }}</span>
+          {{ end }}
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="book-info-col">
+        <div class="book-number">Book {{ printf "%02d" (add $i 1) }}</div>
+        <h2 class="book-title"><a href="{{ $book.Permalink }}" style="color:inherit;text-decoration:none;">{{ $book.Title }}</a></h2>
+        {{ with $book.Params.publisher }}
+        <div class="book-publisher">{{ . }}{{ with $book.Params.pub_date }} &middot; {{ (time .).Format "2006" }}{{ end }}</div>
+        {{ end }}
+
+        {{ with $book.Params.description }}
+        <div class="book-description">
+          <p>{{ . }}</p>
+        </div>
+        {{ end }}
+
+        {{ with $book.Params.buy_links }}
+        <div class="book-buy-links">
+          {{ range $j, $link := . }}
+          <a href="{{ $link.url }}" class="{{ if eq $j 0 }}btn-fill{{ else }}btn-ghost{{ end }}" target="_blank" rel="noopener">{{ $link.label }}</a>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ with $book.Params.praise }}
+        <div class="praise-section">
+          <div class="praise-label">Praise</div>
+          {{ range . }}
+          <div class="praise-quote">
+            <blockquote>{{ . | markdownify }}</blockquote>
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}
+
+{{ else }}
+{{/* ════════════════════════════════════════════════════════════════
+     BOOK SINGLE (sub-section _index.md) — individual book page
+     ════════════════════════════════════════════════════════════════ */}}
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb anim-up">
+      <a href="/">Home</a>
+      <span class="sep">//</span>
+      <a href="{{ (site.GetPage "section" "books").Permalink }}">Books</a>
+      <span class="sep">//</span>
+      {{ .Title }}
+    </div>
+    <h1 class="page-title anim-up d1">{{ .Title }}</h1>
+    {{ with .Params.publisher }}
+    <p class="page-subtitle anim-up d2">{{ . }}{{ with $.Params.pub_date }} &middot; {{ (time .).Format "2006" }}{{ end }}</p>
+    {{ end }}
+  </div>
+</div>
+
+<section class="book-section">
+  <div class="book-section-inner">
+    <div class="book-layout">
+
+      <!-- COVER -->
+      <div class="book-cover-col">
+        <div class="book-cover-placeholder">
+          {{ with .Params.cover }}
+          <img src="{{ . }}" alt="{{ $.Title }}" style="width:100%;height:100%;object-fit:contain;">
+          {{ else }}
+          <span>{{ $.Title }}</span>
+          {{ end }}
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="book-info-col">
+
+        {{ with .Params.description }}
+        <div class="book-description">
+          <p>{{ . }}</p>
+        </div>
+        {{ end }}
+
+        {{ with .Params.buy_links }}
+        <div class="book-buy-links">
+          {{ range $j, $link := . }}
+          <a href="{{ $link.url }}" class="{{ if eq $j 0 }}btn-fill{{ else }}btn-ghost{{ end }}" target="_blank" rel="noopener">{{ $link.label }}</a>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ with .Params.praise }}
+        <div class="praise-section">
+          <div class="praise-label">Praise</div>
+          {{ range . }}
+          <div class="praise-quote">
+            <blockquote>{{ . | markdownify }}</blockquote>
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ with .Content }}
+        <div class="content" style="margin-top:3rem;">
+          {{ . }}
+        </div>
+        {{ end }}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}
+
+{{ end }}

@@ -1,0 +1,29 @@
+{{ define "main" }}
+{{/* ── WRITING LANDING PAGE ── */}}
+{{/* Simple approach: render .Content with Option B typography */}}
+
+{{/* Page header with breadcrumb */}}
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">//</span>
+      {{ .Title }}
+    </div>
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.intro }}
+      <p class="page-intro">{{ . }}</p>
+    {{ end }}
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    {{ with .Content }}
+      <div class="content">
+        {{ . }}
+      </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

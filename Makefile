@@ -10,10 +10,10 @@ help:
 	@echo "  audit-links     Run external link audit"
 
 build:
-	$(HUGO) -s site-educenter --gc --minify
+	$(HUGO) -s site-optionb --gc --minify
 
 serve:
-	$(HUGO) server -s site-educenter
+	$(HUGO) server -s site-optionb
 
 cms:
 	npx decap-server

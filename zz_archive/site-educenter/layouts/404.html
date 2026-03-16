@@ -1,0 +1,18 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-7">
+        <p class="text-muted text-uppercase small mb-2">404</p>
+        <h1 class="mb-3">Page not found</h1>
+        <p class="text-muted mb-4">The page you're looking for isn't here. Try one of these:</p>
+        <div class="d-flex justify-content-center flex-wrap">
+          <a class="btn btn-primary m-1" href="{{ "/" | relURL }}">Go home</a>
+          <a class="btn btn-outline-primary m-1" href="{{ "/poetry/" | relURL }}">Browse poetry</a>
+          <a class="btn btn-outline-primary m-1" href="{{ "/books/" | relURL }}">Browse books</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

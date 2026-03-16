@@ -1,0 +1,16 @@
+<section class="page-title-section page-title-section--default overlay">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <ul class="list-inline custom-breadcrumb">
+          <li class="list-inline-item h2 text-primary font-secondary">{{ .Title }}</li>
+          <li class="list-inline-item text-white h3 font-secondary nasted">/</li>
+          <li class="list-inline-item text-white h3 font-secondary">{{ .Section | title }}</li>
+        </ul>
+        {{ with .Params.intro }}
+        <p class="text-lighten mb-0">{{ . }}</p>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
