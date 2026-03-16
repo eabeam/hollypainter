@@ -9,7 +9,7 @@ buy_links:
   - label: "Available for pre-order here"
     url: "https://blackspringpressgroup.com/products/at-last-we-listen-closely-cryptic-crossword-poems"
 ---
-[Available for pre-order here!](https://blackspringpressgroup.com/products/at-last-we-listen-closely-cryptic-crossword-poems) Coming in 2025 from Black Spring Press.
+[Available for pre-order here!](https://blackspringpressgroup.com/products/at-last-we-listen-closely-cryptic-crossword-poems) Coming in 2026 from Black Spring Press.
 
 *At last, we listen closely: cryptic crossword poems* brings together two favorite pastimes: reading poetry and doing crossword puzzles. In this collection, Holly Painter invents an original form: solvable interconnected poems based on the wordplay-inflected cryptic crosswords found in British newspapers and around the world.
 

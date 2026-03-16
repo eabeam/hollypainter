@@ -4,3 +4,8 @@
 
 # Hugo build lock files
 **/.hugo_build.lock
+
+# Hugo generated output
+**/public/
+**/resources/
+hugo_stats.json

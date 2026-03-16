@@ -1,7 +1,7 @@
 ---
 title: "About"
 url: "/about/"
-cv_file: "/uploads/wp/holly-painter-cv-2021.pdf"
+cv_file: "/uploads/holly-painter-cv-2026.pdf"
 cv_label: "Holly Painter CV (PDF)"
 ---
 

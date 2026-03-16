@@ -1,13 +1,9 @@
 [build]
-base = "site-preview"
-command = "echo 'Static site — no build needed'"
-publish = "."
+base = "site-educenter"
+command = "hugo --gc --minify"
+publish = "public"
 
-# Previous config (archived to branch archive/site-educenter-v1):
-# base = "site-educenter"
-# command = "hugo --gc --minify"
-# publish = "public"
-# [build.environment]
-# HUGO_VERSION = "0.147.2"
-# HUGO_ENV = "production"
-# HUGO_ENABLEGITINFO = "true"
+[build.environment]
+HUGO_VERSION = "0.156.0"
+HUGO_ENV = "production"
+HUGO_ENABLEGITINFO = "true"

@@ -6,6 +6,11 @@ url = "poetry/"
 weight = 1
 
 [[main]]
+name = "Writing"
+url = "writing/"
+weight = 10
+
+[[main]]
 name = "Books"
 identifier = "books"
 url = "books/"

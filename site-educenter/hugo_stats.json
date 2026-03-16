@@ -17,8 +17,10 @@
       "h6",
       "head",
       "header",
+      "hr",
       "html",
       "i",
+      "iframe",
       "img",
       "input",
       "label",
@@ -33,8 +35,15 @@
       "section",
       "select",
       "span",
+      "strong",
+      "table",
+      "tbody",
+      "td",
       "textarea",
+      "th",
+      "thead",
       "title",
+      "tr",
       "ul"
     ],
     "classes": [
@@ -188,9 +197,21 @@
       "contact-email",
       "contact-message",
       "contact-name",
+      "essays",
+      "events",
+      "fiction",
+      "interview",
       "main-content",
+      "music",
       "navigation",
-      "read-sample-poems"
+      "opinion",
+      "other-current-projects",
+      "programs",
+      "proud-little-state",
+      "read-sample-poems",
+      "recent-courses",
+      "service",
+      "writing-centers--ai-research"
     ]
   }
 }
