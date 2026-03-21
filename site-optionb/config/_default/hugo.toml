@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://hollypainter.netlify.app/"
+baseURL = "https://hollypainter.com/"
 title = "Holly Painter"
 timeZone = "America/New_York"
 
