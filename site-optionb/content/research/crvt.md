@@ -16,7 +16,9 @@ CRVT also publishes a monthly research newsletter that compiles findings from Ve
 
 ### Proud Little State
 
-*Proud Little State* is a comics series exploring Vermont's queer history, created in collaboration with [Vermont Folklife](https://www.vermontfolklife.org/), the Vermont Queer Archives, and local artists. The first issue is on the 1983 Burlington Pride Parade (Vermont's first!), and it is scheduled for release in **Spring 2026**.
+![Proud Little State #1: Burlington Pride 1983 cover](/uploads/proud-little-state-1-cover.jpg)
+
+*Proud Little State* is a comics series exploring Vermont's queer history, created in collaboration with [Vermont Folklife](https://www.vermontfolklife.org/), the Vermont Queer Archives, and local artists. The first issue, *Burlington Pride 1983* by Teppi Zuppo, covers the 1983 Burlington Pride Parade — Vermont's first! — and will be released on **April 7, 2026**.
 
 ---
 
